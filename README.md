@@ -1,6 +1,5 @@
-# Repo for **From Scores to Steps: Diagnosing and Improving LLM Performance in Evidence-Based Medical Calculations**   
-    
-> **Anonymous repository for EMNLP 2025**  
+
+> **Official Repository for EMNLP 2025 Oral Paper: From Scores to Steps: Diagnosing and Improving LLM Performance in Evidence-Based Medical Calculations**  
 > This repo contains the complete inference pipeline and *LLM evaluation* code used in the paper, allowing reviewers and researchers to reproduce every experiment.
 
 ---
@@ -24,8 +23,8 @@
 ### 1 · Install dependencies
 
 ```bash
-git clone <anonymous-repo-url>
-cd <repo>
+git clone https://github.com/Super-Billy/EMNLP-2025-MedRaC.git
+cd EMNLP-2025-MedRaC
 
 pip install -r requirements.txt
 

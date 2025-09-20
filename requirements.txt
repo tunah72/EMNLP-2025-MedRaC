@@ -1,0 +1,13 @@
+langchain==0.3.26
+langchain_community==0.3.26
+langchain_openai==0.3.27
+nest_asyncio==1.6.0
+numpy==1.26.2
+openai==1.93.0
+pandas==2.3.0
+pydantic==2.11.7
+python-dotenv==1.1.1
+tiktoken==0.9.0
+tqdm==4.67.1
+transformers==4.52.4
+vllm==0.8.3

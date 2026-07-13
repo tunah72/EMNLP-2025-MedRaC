@@ -1,0 +1,14 @@
+# Minimal API-based seminar environment (tested with Python 3.11 on macOS ARM64).
+# The local-model path remains available through the original requirements.txt.
+faiss-cpu==1.11.0
+langchain==0.3.26
+langchain-community==0.3.26
+langchain-openai==0.3.27
+nest-asyncio==1.6.0
+numpy==1.26.2
+openai==1.93.0
+pandas==2.3.0
+pydantic==2.11.7
+python-dotenv==1.1.1
+tiktoken==0.9.0
+tqdm==4.67.1

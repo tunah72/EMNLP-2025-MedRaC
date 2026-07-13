@@ -137,6 +137,8 @@ celerybeat.pid
 # Environments
 .env
 .envrc
+/artifacts/
+/data/github_models_canonical_formulas_index/
 .venv
 env/
 venv/

@@ -1,0 +1,48 @@
+\usetheme{Madrid}
+\usecolortheme{default}
+\useinnertheme{circles}
+
+%------------- Đánh số công thức và Caption -------------
+\setbeamertemplate{equations}[numbered]
+\setbeamertemplate{caption}[numbered]
+\captionsetup{labelfont={color=black},textfont={color=black}}
+\setbeamertemplate{frametitle}{%
+  \nointerlineskip%
+  \begin{beamercolorbox}[sep=0.25cm,wd=\paperwidth,leftskip=0.5cm]{frametitle}%
+    \usebeamerfont{framesubtitle}\usebeamercolor[fg]{framesubtitle}%
+    \scriptsize%
+    \ifx\insertsection\empty\else\insertsection\fi%
+    \ifx\insertsubsection\empty\else\ - \insertsubsection\fi%
+    \par\vspace{0.06cm}%
+    \usebeamerfont{frametitle}\insertframetitle\strut\par%
+  \end{beamercolorbox}%
+}
+
+%------------- Màu nhận diện -------------
+\definecolor{Logo1}{HTML}{D35400}
+\definecolor{Logo2}{HTML}{34495E}
+
+\setbeamercolor*{palette primary}{bg=Logo1, fg=white}
+\setbeamercolor*{palette secondary}{bg=Logo2, fg=white}
+\setbeamercolor*{palette tertiary}{bg=white, fg=Logo1}
+\setbeamercolor*{palette quaternary}{bg=Logo1,fg=white}
+\setbeamercolor{structure}{fg=Logo1}
+\setbeamercolor{section in toc}{fg=Logo1}
+
+%------------- Mục lục đầu mỗi section -------------
+% \AtBeginSection[]{
+%   \begin{frame}
+%     \frametitle{Mục lục}
+%     \tableofcontents[currentsection]
+%   \end{frame}
+% }
+
+% Không chèn mục lục ở đầu mỗi subsection để deck không vượt quá 40 slide.
+
+% Căn đều (justify) toàn bộ các khối văn bản trong slide
+\apptocmd{\frame}{}{\justifying}{}
+\addtobeamertemplate{block begin}{}{\justifying}
+\makeatletter
+\apptocmd{\beamer@column}{\justifying}{}{}
+\makeatother
+

@@ -130,3 +130,13 @@ small and incomplete for a statistical-significance claim.
 Step-wise evaluation must be added as a derived, evaluation-only artifact. It
 must reuse these stored generations, checkpoint after every method/sample, and
 must not overwrite the parent artifact.
+
+### Deferred follow-up status
+
+The API-dependent post-hoc evaluation was intentionally paused on 2026-07-13
+because the remaining GitHub Models free-tier request quota could not cover the
+80 planned evaluator calls. Phase 5 is closed using the rule-based results
+above. A later quota window may resume the separate two-batch evaluation-only
+workflow documented in `docs/RUNBOOK.md`; it must not rerun generation or alter
+the parent artifact. No local CC, FE, strict, or F/E/C/A result is claimed until
+all 20 method/sample evaluation units are complete.

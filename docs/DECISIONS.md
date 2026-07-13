@@ -190,3 +190,65 @@ the scientific history.
 - Ten paired rows require 80 evaluator chat requests. The recommended free-tier
   schedule is two five-row batches of 40 requests each in separate quota
   windows, using the same evaluator model and settings.
+
+## 2026-07-13 — Close Phase 5 and defer API-dependent step-wise evaluation
+
+- Phase 5 is considered complete for the locally reproduced, rule-evaluated
+  ten-row comparison stored in `artifacts/experiments/20260713T060240915862Z/`.
+- The post-hoc F/E/C/A evaluation is deliberately deferred because the current
+  GitHub Models free-tier request budget is insufficient. It is future follow-up
+  work, not a failed or partially fabricated Phase 5 result.
+- Until the derived artifact reaches `status: "completed"`, local F/E/C/A,
+  strict correctness, Conditional Correctness, First Error Attribution, and
+  masked-reasoning metrics remain unavailable and must not be reported.
+- Closing the current plan must not make generation, evaluation, or embedding
+  requests. The saved source artifact remains immutable; a later run must use
+  the documented evaluation-only runner and a separate output directory.
+
+## 2026-07-13 — Streamlit MedRaC seminar interface
+
+- The Streamlit application presents MedRaC RAG only. It does not run or render
+  Plain CoT and is not a baseline-comparison interface.
+- Replay is the default and works without credentials. It discovers demo and
+  experiment directories that contain readable `manifest.json` and
+  list-shaped `samples.json` files, displays each artifact's recorded status and
+  provenance, and exposes only the `medrac_rag` branch of experiment artifacts.
+  Missing, malformed, or non-list artifact directories are skipped with a
+  warning; discovery does not silently relabel a non-completed run as completed.
+- Dataset live mode is limited to one explicit row from
+  `config/mini_experiment.json`. RAG is always enabled and the only execution
+  mode is `safe_ast_child_process`.
+- Retrieval uses the Question alone. Patient Note, Question, and the retrieved
+  formula are all passed to value extraction; Question is also preserved in the
+  code-generation input. The UI must not imply that Patient Note is a retrieval
+  query.
+- Step-wise evaluation is opt-in because it adds four chat requests. A complete
+  MedRaC run with F/E/C/A normally uses six chat requests and one embedding
+  request. Missing step-wise output is unavailable, not incorrect.
+- Custom input is deferred. The released pipeline cannot reliably validate an
+  arbitrary Question against a selected Calculator ID and custom samples lack
+  the benchmark ground truth required by the evaluators.
+- Live Input Sample selection is therefore manifest-controlled rather than
+  editable free text. The sidebar may select any row declared in
+  `config/mini_experiment.json`; Patient Note and Question are then loaded
+  verbatim from the identity-checked `data/test_data.csv` row. Adding a new
+  seminar sample requires updating the manifest's DataFrame index, row number,
+  Calculator ID, family, and `expected_sample_count`, without modifying the
+  benchmark CSV.
+- Streamlit live results are locally reproduced seminar artifacts, never
+  paper-reported results or clinical outputs. API clients and credentials are
+  not cached, displayed, or written to artifacts.
+
+## 2026-07-13 — Final Streamlit review boundary
+
+- The final review found no blocking correctness, safety, or seminar-usability
+  issue. The three-field input contract, Question-only retrieval query,
+  note-plus-question extraction, safe-executor-only live path, explicit API
+  action, replay-without-credentials path, and MedRaC-only downloads are covered
+  by code inspection, unit tests, Streamlit AppTest, and a local browser smoke.
+- The review made no generation, evaluation, or embedding request and did not
+  alter benchmark data, formulas, indexes, or existing generated artifacts.
+- Long metric values can be visually truncated by Streamlit cards at narrower
+  viewports. This is accepted as a non-blocking presentation limitation because
+  the complete Calculator ID/name and clinical text remain available in the
+  selectors and dedicated detail fields.

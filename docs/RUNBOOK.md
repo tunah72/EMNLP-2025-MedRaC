@@ -650,3 +650,120 @@ rule evaluation `Correct`; final answer was `25.238095238095237`. Recorded chat
 usage was 1,620 + 263 tokens for extraction and 563 + 258 for code generation.
 LLM step-wise evaluation was intentionally not enabled, so no F/E/C/A evaluator
 result is claimed from this smoke run.
+
+## Phase 6 final verification — 2026-07-13
+
+Phase 5 is closed at the rule-based comparison. The 80-request post-hoc F/E/C/A
+run is deferred to later GitHub Models quota windows and was not started during
+this verification.
+
+| Check | Result |
+|---|---|
+| Compile `seminar_demo`, `scripts`, and `tests` | PASS |
+| Full standard-library unit suite | PASS, 28 tests |
+| GitHub-default one-row demo dry-run | PASS, no API call |
+| Deterministic mini-experiment dry-run | PASS, no API call |
+| Post-hoc evaluation dry-run | PASS; 20 units, 80 expected calls, 0 made |
+| Parent manifest/sample hashes before and after dry-run | PASS, unchanged |
+| Dependency consistency | PASS, no broken requirements |
+| Patch whitespace validation | PASS |
+
+The successful API-dependent evidence remains the previously recorded
+one-sample smoke artifact and ten-row Phase 5 artifact; they were not rerun.
+See `docs/FINAL_REPORT.md` for the final handoff, claim boundary, artifact paths,
+and unresolved risks.
+
+## Streamlit MedRaC seminar application
+
+Install the updated API-demo dependencies, then launch from the repository root:
+
+```bash
+.venv/bin/python -m pip install -r requirements-demo.txt
+.venv/bin/python -m streamlit run streamlit_app.py
+```
+
+Replay mode is the default and requires neither API credentials nor network
+access. It discovers artifact directories with readable `manifest.json` and
+list-shaped `samples.json` files, shows their recorded status/provenance, and
+loads the `medrac_rag` branch of experiment artifacts. Missing or malformed
+artifact directories are skipped with a warning. Plain CoT content is not
+displayed or included in per-sample downloads.
+
+Dataset live mode is restricted to one of the ten committed rows in
+`config/mini_experiment.json`. It requires `GITHUB_TOKEN`, the verified canonical
+55-formula index, and an explicit **Run one MedRaC sample** button press. It
+always uses RAG and `safe_ast_child_process`; there is no unrestricted-executor
+fallback. Step-wise evaluation is disabled by default. Enabling it raises the
+expected one-sample request count from two chat requests plus one embedding
+request to six chat requests plus one embedding request.
+
+For an offline headless smoke test:
+
+```bash
+GITHUB_TOKEN= OPENAI_API_KEY= \
+  .venv/bin/python -m streamlit run streamlit_app.py \
+  --server.headless true --server.port 8501
+```
+
+Then open `http://localhost:8501` or check `http://localhost:8501/_stcore/health`.
+Without `GITHUB_TOKEN`, replay remains available and the live-run button is
+disabled.
+
+### Selecting or changing the Input Sample
+
+In Replay mode, use the sidebar's **Artifact run** and **Sample** selectors. The
+input comes from the selected stored artifact and remains read-only.
+
+In Dataset live demo mode, use **Deterministic sample** to choose one of the ten
+rows declared in `config/mini_experiment.json`. The application verifies the
+manifest's DataFrame index, row number, and Calculator ID, then loads Patient
+Note and Question verbatim from the matching `data/test_data.csv` row. These two
+fields are always displayed separately and are not editable or inferred.
+
+To add another approved dataset row, inspect its identity without changing the
+CSV:
+
+```bash
+.venv/bin/python - <<'PY'
+import pandas as pd
+
+frame = pd.read_csv("data/test_data.csv", encoding="utf-8")
+print(frame[[
+    "DataFrame Index",
+    "Row Number",
+    "Calculator ID",
+    "Calculator Name",
+    "Question",
+]].to_string(index=False))
+PY
+```
+
+Add the verified `dataframe_index`, `row_number`, `calculator_id`, `family`, and
+`rationale` to `config/mini_experiment.json`, then increase
+`expected_sample_count` to match the number of declared entries. Restart the app
+or clear Streamlit's data cache. Do not edit `data/test_data.csv`, merge Patient
+Note and Question, or introduce an arbitrary Calculator ID. Custom free-text
+input remains intentionally deferred.
+
+### Final Streamlit review — 2026-07-13
+
+The user independently confirmed that the application operates correctly. A
+second offline engineering review then recorded the following evidence without
+making an API request:
+
+| Check | Result |
+|---|---|
+| Forced compile of `streamlit_app.py`, `seminar_demo`, `scripts`, and `tests` | PASS |
+| Full standard-library unit suite | PASS, 39 tests |
+| Dependency consistency | PASS, no broken requirements |
+| Patch whitespace validation | PASS |
+| Streamlit AppTest, default Replay mode | PASS; separate non-empty Patient Note and Question |
+| Streamlit AppTest with empty credentials, Dataset live demo | PASS; live button disabled |
+| Local headless server startup | PASS on `http://localhost:8501` |
+| Browser DOM/visual review | PASS; disclaimer, provenance, inputs, stages, and downloads visible |
+
+The review also reconfirmed that `run_medrac_sample()` calls RAG with Question,
+passes Patient Note + Question + retrieved formula to extraction, passes
+Question to code generation, and invokes only `execute_safely()` for generated
+code. The unrestricted `MedRaC.execute_code()` path remains outside the
+Streamlit adapter and is guarded by focused tests.

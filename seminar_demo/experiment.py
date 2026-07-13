@@ -7,7 +7,7 @@ import shlex
 from dataclasses import dataclass
 from datetime import datetime, timezone
 from pathlib import Path
-from typing import Any, Sequence
+from typing import Any, Callable, Sequence
 
 import numpy as np
 import pandas as pd
@@ -38,6 +38,7 @@ from .safe_execution import execute_safely
 
 
 METHODS = ("plain_cot", "medrac_rag")
+ProgressCallback = Callable[[str, dict[str, Any]], None]
 
 
 @dataclass(frozen=True)
@@ -222,7 +223,21 @@ def _run_plain_sample(
     return record
 
 
-def _run_medrac_sample(
+def single_sample_batch_args(row: pd.Series) -> tuple[list[str], list[Any], list[Any]]:
+    """Return one dataset row in the list-shaped interface used by MedRaC."""
+    calculator_id = str(row["Calculator ID"]).strip()
+    patient_note = row["Patient Note"]
+    question = row["Question"]
+    if not calculator_id:
+        raise ValueError("Calculator ID is required")
+    if not isinstance(patient_note, str) or not patient_note.strip():
+        raise ValueError("Patient Note is required")
+    if not isinstance(question, str) or not question.strip():
+        raise ValueError("Question is required")
+    return [calculator_id], [patient_note], [question]
+
+
+def run_medrac_sample(
     row: pd.Series,
     canonical_formula: str,
     generator: GitHubModelsLLM,
@@ -231,7 +246,9 @@ def _run_medrac_sample(
     *,
     use_llm_evaluation: bool,
     timeout_seconds: float,
+    progress_callback: ProgressCallback | None = None,
 ) -> dict[str, Any]:
+    """Run one MedRaC RAG sample while preserving partial stage results."""
     record = _empty_method_record()
     record["retrieval"]["status"] = "not_run"
     record["extraction"]["status"] = "not_run"
@@ -241,16 +258,31 @@ def _run_medrac_sample(
         "result": None,
         "error": None,
         "execution_mode": "safe_ast_child_process",
+        "validation_status": "not_run",
     }
     response: dict[str, Any] = {}
+
+    def notify(stage: str) -> None:
+        if progress_callback is not None:
+            progress_callback(stage, record)
+
     try:
+        _calids, patient_notes, questions = single_sample_batch_args(row)
+        question = questions[0]
         record["request_counts"]["embedding_attempts"] += 1
-        formula, score = rag.retrieve(row["Question"], k=1)[0]
-        record["retrieval"] = {"status": "success", "formula": formula, "score": score}
+        formula, score = rag.retrieve(question, k=1)[0]
+        record["retrieval"] = {
+            "status": "success",
+            "query": question,
+            "formula": formula,
+            "score": score,
+            "rank": 1,
+        }
         record["token_usage"]["embedding_input"] = rag.last_embedding_input_tokens
+        notify("retrieval")
 
         prompts = MedRaC._gen_extracted_values(
-            None, [row["Patient Note"]], [formula], [row["Question"]]
+            None, patient_notes, [formula], questions
         )
         record["request_counts"]["chat_attempts"] += 1
         payload, input_tokens, output_tokens = generator.generate(
@@ -263,18 +295,26 @@ def _run_medrac_sample(
         record["extraction"] = {"status": "success", "extracted_values": values}
         record["token_usage"]["generation_input"] = input_tokens
         record["token_usage"]["generation_output"] = output_tokens
+        notify("extraction")
 
         record["request_counts"]["chat_attempts"] += 1
         code_payload, code_input, code_output = generator.generate(
-            _code_prompts([formula], [values], [row["Question"]]),
+            _code_prompts([formula], [values], questions),
             show_progress=False,
         )[0]
         code = code_payload if isinstance(code_payload, str) else json.dumps(code_payload)
         record["code_generation"] = {"status": "success", "code": code}
         record["token_usage"]["code_input"] = code_input
         record["token_usage"]["code_output"] = code_output
+        notify("code_generation")
         execution = execute_safely(code, timeout_seconds=timeout_seconds)
-        record["execution"] = execution.to_dict()
+        record["execution"] = {
+            **execution.to_dict(),
+            "validation_status": (
+                "rejected" if execution.status == "rejected" else "passed"
+            ),
+        }
+        notify("execution")
         if execution.status != "success":
             raise RuntimeError(f"Safe execution failed: {execution.error}")
         record["final_answer"] = execution.result
@@ -288,6 +328,7 @@ def _run_medrac_sample(
         result = _rule_evaluate(response, row)
         record["rule_evaluation"] = {"status": "success", "result": result}
         record["status"] = "success"
+        notify("rule_evaluation")
 
         if use_llm_evaluation and evaluator_model is not None:
             evaluation, in_tokens, out_tokens, attempts = _stepwise_evaluate(
@@ -301,9 +342,13 @@ def _run_medrac_sample(
                 "evaluation": evaluation,
             }
             record["first_failed_step"] = first_failed_step(evaluation)
+            notify("stepwise_evaluation")
     except Exception as exc:
         record["status"] = "failed"
         record["error"] = _error_payload(exc)
+        notify("failed")
+    else:
+        notify("completed")
     return record
 
 
@@ -634,7 +679,7 @@ def run_mini_experiment(config: ExperimentConfig, policy: ExclusionPolicy) -> Pa
                 evaluator_model,
                 use_llm_evaluation=config.use_llm_evaluation,
             )
-            sample["methods"]["medrac_rag"] = _run_medrac_sample(
+            sample["methods"]["medrac_rag"] = run_medrac_sample(
                 row,
                 formulas_by_id[str(row["Calculator ID"])],
                 generator,

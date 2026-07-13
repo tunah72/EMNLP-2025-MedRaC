@@ -767,3 +767,28 @@ passes Patient Note + Question + retrieved formula to extraction, passes
 Question to code generation, and invokes only `execute_safely()` for generated
 code. The unrestricted `MedRaC.execute_code()` path remains outside the
 Streamlit adapter and is guarded by focused tests.
+
+## Seminar presentation
+
+The Beamer entry point is `slides/main.tex`. It reuses the checked-in Madrid
+base theme, XeLaTeX Arial/Times New Roman fonts, and BibTeX setup. Its academic
+blue title bar, three-part footer, group metadata, and figure-source treatment
+are defined in `slides/preamble/settings.tex`.
+Compile from the repository root with:
+
+```bash
+cd slides && latexmk -xelatex -interaction=nonstopmode -halt-on-error main.tex
+```
+
+The compiled output is `slides/main.pdf`. Group K23 members, supervisors, and
+institution metadata are stored in `slides/content/0-title.tex` and
+`slides/content/1-introduction.tex`. Paper-figure provenance is recorded in
+`slides/assets/MANIFEST.md`; claim-level sources and exact quantitative values
+are recorded in `slides/EVIDENCE_MAP.md`.
+
+For visual QA, render every slide and inspect each page at full size:
+
+```bash
+mkdir -p /tmp/medrac-slides-qa
+pdftoppm -png -r 150 slides/main.pdf /tmp/medrac-slides-qa/slide
+```

@@ -1,0 +1,113 @@
+\section{Appendix}
+
+\begin{frame}{Appendix: Complete Main-Results Table}
+  \centering
+  \includegraphics[width=0.98\textwidth,height=0.69\textheight,keepaspectratio]{paper_table_1_main_results.pdf}
+  \fixedtabcaption{4}{Complete paper-reported accuracy results (paper Table 1; \%).}
+  \vspace{0.10cm}
+  {\scriptsize Direct uses final-answer scoring, whereas reasoning-based methods use step-wise automatic evaluation.}
+  \sourcenote{\cite{wang2026medrac}}
+\end{frame}
+
+\begin{frame}{Appendix: Complete Metric Definitions}
+  \sectionlabel{Strict correctness}\par
+  \begin{equation}
+    \kappa=V(F)\land V(E)\land V(C)\land V(A)
+  \end{equation}
+  \sectionlabel{Conditional Correctness}\par
+  \begin{equation}
+    CC_i=P\!\left(V(S_i)\mid V(S_1)\land\cdots\land V(S_{i-1})\right)
+  \end{equation}
+  \sectionlabel{First Error Attribution Rate}\par
+  \begin{equation}
+    FE_i=P\!\left(V(S_1)\land\cdots\land V(S_{i-1})\land\neg V(S_i)\mid\neg\kappa\right)
+  \end{equation}
+  \sourcenote{\cite{wang2026medrac}}
+\end{frame}
+
+\begin{frame}{Appendix: Paper Discrepancies}
+  \small
+  \begin{tabular}{@{}>{\raggedright\arraybackslash}p{0.18\textwidth}>{\raggedright\arraybackslash}p{0.36\textwidth}>{\raggedright\arraybackslash}p{0.38\textwidth}@{}}
+    \toprule
+    Topic & Conflicting statements & Consequence \\
+    \midrule
+    Source cohort & Section 2: 1,047 vignettes; Section 4 and Appendix A: 1,048 & The reported cleanup total differs by one source case \\
+    Formula CC without RAG & Section 5 prose: 7.34\%; Table 5: 46.49\% & The no-RAG Formula CC value cannot be uniquely reconciled \\
+    \bottomrule
+  \end{tabular}
+  \tabcaption{Numerical inconsistencies identified in the paper.}
+  \vspace{0.40cm}
+
+  No numerical reconciliation is inferred when the paper does not provide one.
+  \sourcenote{\cite{wang2026medrac}}
+\end{frame}
+
+\begin{frame}{Appendix: Formula-Bank Scaling}
+  \centering
+  \sectionlabel{Formula bank: $55 \rightarrow 785$ documents ($\approx 14\times$)}\par\vspace{0.22cm}
+  \begin{tabular}{lrr}
+    \toprule
+    Embedding model & Top-1 (\%) & Top-2 (\%) \\
+    \midrule
+    ada-002 & 100.00 & 100.00 \\
+    text-embedding-3-large & 96.36 & 100.00 \\
+    text-embedding-3-small & 98.18 & 100.00 \\
+    \bottomrule
+  \end{tabular}
+  \tabcaption{Retrieval accuracy with the expanded 785-formula memory.}
+  \vspace{0.32cm}
+
+  {\small Top-2 retrieval remains $100\%$ in this experiment; the result does not establish scaling to unrestricted medical knowledge.}
+  \sourcenote{\cite{wang2026medrac}}
+\end{frame}
+
+\begin{frame}{Appendix: Local Experiment}
+  \begin{columns}[T,onlytextwidth]
+    \column{0.48\textwidth}
+      \sectionlabel{Recorded configuration}\par\vspace{0.10cm}
+      \begin{tabular}{@{}lr@{}}
+        Samples & 10 \\
+        Equation / rule & 7 / 3 \\
+        Temperature / seed & 0.0 / 42 \\
+        Plain chat attempts & 10 \\
+        MedRaC chat attempts & 20 \\
+        MedRaC embedding attempts & 10 \\
+        Failed / skipped & 0 / 0 \\
+      \end{tabular}
+    \column{0.48\textwidth}
+      \sectionlabel{Metric availability}\par\vspace{0.10cm}
+      \begin{tabular}{@{}lr@{}}
+        Final-answer accuracy & Available \\
+        Formula accuracy & Not evaluated \\
+        Extraction accuracy & Not evaluated \\
+        Calculation accuracy & Not evaluated \\
+        Answer step accuracy & Not evaluated \\
+        Strict / CC / FE & Not evaluated \\
+      \end{tabular}
+      \vspace{0.18cm}
+
+      {\small LLM step-wise evaluation was disabled in the completed run.}
+  \end{columns}
+  \tabcaption{Execution counts and metric availability in the local experiment.}
+\end{frame}
+
+\begin{frame}{Appendix: Safe-Execution Boundary}
+  \begin{columns}[T,onlytextwidth]
+    \column{0.48\textwidth}
+      \sectionlabel{Implemented safeguards}\par\vspace{0.10cm}
+      \begin{itemize}
+        \item AST node and function allowlists.
+        \item No imports, filesystem, network, shell, or input.
+        \item Spawned child process with a strict timeout.
+        \item Result-type and magnitude checks.
+      \end{itemize}
+    \column{0.48\textwidth}
+      \sectionlabel{Not a secure sandbox}\par\vspace{0.10cm}
+      \begin{itemize}
+        \item No kernel isolation.
+        \item No syscall filtering.
+        \item No multi-tenant security guarantee.
+        \item Restricted to the seminar demonstration.
+      \end{itemize}
+  \end{columns}
+\end{frame}

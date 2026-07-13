@@ -1,10 +1,11 @@
+\PassOptionsToPackage{draft}{hyperref}
 \documentclass[aspectratio=169]{beamer}
 
 \setbeamertemplate{navigation symbols}{}
 
 \input{preamble/packages}
 \input{preamble/settings}
-\graphicspath{{img/}{../report/img/}{../report/img/autoregressive_world_modeling_and_planning/}}
+\graphicspath{{assets/paper/}{assets/local/}{img/}}
 \input{content/0-title}
 
 %-------------------------------------
@@ -12,30 +13,18 @@
 
 \begin{frame}
   \titlepage
-  \vspace{-0.5cm}
-  \centering
 \end{frame}
 
-\begin{frame}
-  \frametitle{Mục lục}
-  \setcounter{tocdepth}{2}
-  \tableofcontents
-\end{frame}
-
-%-------------------------------------
-
-\input{content/1-intro}
-\input{content/2-background}
-\input{content/3-0-main}
-\input{content/3-1-basics}
-\input{content/3-2-visual}
-\input{content/3-3-world}
-\input{content/3-4-understanding}
-\input{content/3-5-biomedical}
+\input{content/1-introduction}
+\input{content/2-evaluation}
+\input{content/3-method}
 \input{content/4-experiments}
-\input{content/5-conclusion}
+\input{content/5-local-validation}
+\input{content/6-conclusion}
 
-\section{Tài liệu tham khảo}
+\appendix
+\input{content/7-appendix}
+\section{References}
 \input{ref/ref}
 
 \end{document}

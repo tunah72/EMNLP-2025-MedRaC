@@ -1,0 +1,84 @@
+\section{Local Demo and Mini-Experiment}
+
+\begin{frame}{Local Demo Objective and Pipeline}
+  \centering
+  \sectionlabel{Local demo pipeline}\par\vspace{0.16cm}
+  \begin{tikzpicture}[
+    node distance=0.24cm and 0.25cm,
+    box/.style={draw=SeminarBlue,rounded corners=1.2pt,minimum height=0.62cm,align=center,fill=white,font=\scriptsize,inner xsep=4pt},
+    arr/.style={-{Latex[length=2mm]},DeepBlue,thick}
+  ]
+    \node[box] (id) {Calculator ID};
+    \node[box,below=of id] (note) {Patient Note};
+    \node[box,below=of note] (question) {Question};
+    \node[box,right=0.45cm of note] (retrieval) {Formula\\Retrieval};
+    \node[box,right=of retrieval] (extract) {Value\\Extraction};
+    \node[box,right=of extract] (code) {Code\\Generation};
+    \node[box,right=of code] (execute) {Safe\\Execution};
+    \node[box,below=0.48cm of execute] (answer) {Final Answer};
+    \node[box,left=of answer] (evaluate) {Optional F--E--C--A\\Evaluation};
+    \node[box,left=of evaluate] (ui) {Streamlit\\Inspection};
+    \draw[arr] (id.east) -- ++(0.18,0) |- (retrieval.west);
+    \draw[arr] (note.east) -- (retrieval.west);
+    \draw[arr] (question.east) -- ++(0.18,0) |- (retrieval.west);
+    \draw[arr] (retrieval) -- (extract);
+    \draw[arr] (extract) -- (code);
+    \draw[arr] (code) -- (execute);
+    \draw[arr] (execute) -- (answer);
+    \draw[arr] (answer) -- (evaluate);
+    \draw[arr] (evaluate) -- (ui);
+  \end{tikzpicture}
+  \figcaption{Observable stages in the local seminar pipeline.}
+  \vspace{0.16cm}
+
+  \begin{columns}[T,onlytextwidth]
+    \column{0.47\textwidth}
+      \sectionlabel{Objective}\par
+      Execute the workflow and inspect observable intermediate outputs.
+    \column{0.49\textwidth}
+      \sectionlabel{Boundary}\par
+      The demo uses fixed benchmark rows, exposes structured outputs only, and applies seminar-specific safe execution.
+  \end{columns}
+\end{frame}
+
+\begin{frame}{Streamlit Demo and Representative Example}
+  \begin{columns}[T,onlytextwidth]
+    \column{0.49\textwidth}
+      \includegraphics[width=\linewidth,height=0.45\textheight,keepaspectratio]{streamlit_replay_question.png}
+      \vspace{0.08cm}
+      {\scriptsize Calculator ID, Patient Note, Question, and observable pipeline stages.}
+    \column{0.49\textwidth}
+      \includegraphics[width=\linewidth,height=0.45\textheight,keepaspectratio]{streamlit_replay_contract.png}
+      \vspace{0.08cm}
+      {\scriptsize Question-only retrieval, rank, similarity score, and retrieved Cockcroft-Gault formula.}
+  \end{columns}
+  \figcaption{Streamlit replay for Creatinine Clearance (Cockcroft-Gault Equation), Calculator ID 2.}
+\end{frame}
+
+\begin{frame}{Local Mini-Experiment Setup and Results}
+  \centering
+  \scriptsize
+  \begin{tabular}{@{}>{\bfseries}ll@{\hspace{0.70cm}}>{\bfseries}ll@{}}
+    Baseline & Plain(\texttt{cot}) & Proposed & MedRaC + RAG \\
+    Generator & \texttt{openai/gpt-4.1} & Embedding & \texttt{text-embedding-3-small} \\
+    Samples & 10 fixed (7 eq., 3 rule) & Temperature / seed & 0.0 / 42 \\
+  \end{tabular}
+  \vspace{0.16cm}
+
+  \small
+  \begin{tabular}{lrr}
+    \toprule
+    Metric & Plain & MedRaC \\
+    \midrule
+    Final-answer correct & 9/10 & \textbf{10/10} \\
+    Formula / Extraction / Calculation / Answer & n/a & n/a \\
+    Strict correctness / CC / FE & n/a & n/a \\
+    Failed / skipped & 0 / 0 & 0 / 0 \\
+    \bottomrule
+  \end{tabular}
+  \tabcaption{Local mini-experiment results on the fixed ten-case subset.}
+  \raggedright
+  {\scriptsize Step-wise evaluation was disabled; unavailable metrics are not inferred.}
+  \vspace{0.14cm}
+  {\small This ten-case comparison is descriptive and does not support statistical inference.}
+\end{frame}

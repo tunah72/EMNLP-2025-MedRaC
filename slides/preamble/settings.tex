@@ -2,47 +2,113 @@
 \usecolortheme{default}
 \useinnertheme{circles}
 
-%------------- Đánh số công thức và Caption -------------
+% Restrained scientific palette adapted from the supplied seminar reference.
+\definecolor{DeepBlue}{HTML}{0B1F3A}
+\definecolor{SeminarBlue}{HTML}{365F87}
+\definecolor{MediumBlue}{HTML}{587FA5}
+\definecolor{LightBlue}{HTML}{EEF3F8}
+\definecolor{Ink}{HTML}{182230}
+\definecolor{Muted}{HTML}{667085}
+\definecolor{RuleGray}{HTML}{CBD5E1}
+\definecolor{CorrectGreen}{HTML}{138A4B}
+\definecolor{ErrorRed}{HTML}{B42318}
+
+\setbeamercolor{normal text}{fg=Ink,bg=white}
+\setbeamercolor{structure}{fg=SeminarBlue}
+\setbeamercolor{frametitle}{fg=white,bg=DeepBlue}
+\setbeamercolor{title}{fg=white,bg=DeepBlue}
+\setbeamercolor{subtitle}{fg=Ink}
+\setbeamercolor{itemize item}{fg=SeminarBlue}
+\setbeamercolor{itemize subitem}{fg=SeminarBlue}
+\setbeamercolor{enumerate item}{fg=white,bg=SeminarBlue}
+\setbeamercolor{block title}{fg=DeepBlue,bg=LightBlue}
+\setbeamercolor{block body}{fg=Ink,bg=white}
+\setbeamercolor{author in head/foot}{fg=white,bg=DeepBlue}
+\setbeamercolor{title in head/foot}{fg=white,bg=SeminarBlue}
+\setbeamercolor{date in head/foot}{fg=white,bg=MediumBlue}
+\setbeamercolor{section in head/foot}{fg=white,bg=SeminarBlue}
+
+\setbeamerfont{title}{size=\LARGE,series=\bfseries}
+\setbeamerfont{subtitle}{size=\normalsize}
+\setbeamerfont{frametitle}{size=\Large,series=\bfseries}
+\setbeamerfont{block title}{series=\bfseries}
+\setbeamerfont{footnote}{size=\tiny}
+
+\setbeamertemplate{navigation symbols}{}
+\setbeamertemplate{items}[circle]
+\setbeamertemplate{blocks}[default]
 \setbeamertemplate{equations}[numbered]
 \setbeamertemplate{caption}[numbered]
-\captionsetup{labelfont={color=black},textfont={color=black}}
+\captionsetup{labelfont={bf,color=Ink},textfont={color=Ink}}
+
+% Full-width title bar. Section context is shown only in the footer.
 \setbeamertemplate{frametitle}{%
   \nointerlineskip%
-  \begin{beamercolorbox}[sep=0.25cm,wd=\paperwidth,leftskip=0.5cm]{frametitle}%
-    \usebeamerfont{framesubtitle}\usebeamercolor[fg]{framesubtitle}%
-    \scriptsize%
-    \ifx\insertsection\empty\else\insertsection\fi%
-    \ifx\insertsubsection\empty\else\ - \insertsubsection\fi%
-    \par\vspace{0.06cm}%
-    \usebeamerfont{frametitle}\insertframetitle\strut\par%
+  \begin{beamercolorbox}[wd=\paperwidth,ht=0.76cm,dp=0.20cm,leftskip=0.55cm,rightskip=0.55cm]{frametitle}%
+    \usebeamerfont{frametitle}\insertframetitle\strut
   \end{beamercolorbox}%
 }
 
-%------------- Màu nhận diện -------------
-\definecolor{Logo1}{HTML}{D35400}
-\definecolor{Logo2}{HTML}{34495E}
+\setbeamertemplate{footline}{%
+  \leavevmode%
+  \hbox{%
+    \begin{beamercolorbox}[wd=.16\paperwidth,ht=2.35ex,dp=.95ex,center]{author in head/foot}%
+      \color{white}\scriptsize Group K23
+    \end{beamercolorbox}%
+    \begin{beamercolorbox}[wd=.72\paperwidth,ht=2.35ex,dp=.95ex,center]{title in head/foot}%
+      \color{white}\scriptsize\ifnum\insertsectionnumber>0
+        \textbf{\insertsectionnumber. \insertsectionhead}%
+      \else
+        Scientific Paper Presentation
+      \fi
+    \end{beamercolorbox}%
+    \begin{beamercolorbox}[wd=.12\paperwidth,ht=2.35ex,dp=.95ex,center]{date in head/foot}%
+      \color{white}\scriptsize \insertframenumber
+    \end{beamercolorbox}}%
+  \vskip0pt%
+}
 
-\setbeamercolor*{palette primary}{bg=Logo1, fg=white}
-\setbeamercolor*{palette secondary}{bg=Logo2, fg=white}
-\setbeamercolor*{palette tertiary}{bg=white, fg=Logo1}
-\setbeamercolor*{palette quaternary}{bg=Logo1,fg=white}
-\setbeamercolor{structure}{fg=Logo1}
-\setbeamercolor{section in toc}{fg=Logo1}
+\setbeamertemplate{title page}{%
+  \vspace{0.05cm}
+  \centering
+  \includegraphics[width=0.25\textwidth]{fit_hcmus_logo.png}\par
+  \vspace{0.18cm}
+  \begin{beamercolorbox}[wd=0.92\paperwidth,sep=0.24cm,center]{title}%
+    {\usebeamerfont{title}\inserttitle\par}
+    \vspace{0.06cm}
+    {\footnotesize\insertsubtitle\par}
+  \end{beamercolorbox}
+  \vspace{0.16cm}
+  {\small\bfseries\insertauthor\par}
+  {\scriptsize\color{Muted}\paperVenue\par}
+  \vspace{0.13cm}
+  {\small\bfseries Group K23\par}
+  {\scriptsize\groupMembers\par}
+  \vspace{0.11cm}
+  {\scriptsize\insertinstitute\par}
+  {\scriptsize\color{Muted}\courseInfo\enspace|\enspace\insertdate\par}
+}
 
-%------------- Mục lục đầu mỗi section -------------
-% \AtBeginSection[]{
-%   \begin{frame}
-%     \frametitle{Mục lục}
-%     \tableofcontents[currentsection]
-%   \end{frame}
-% }
-
-% Không chèn mục lục ở đầu mỗi subsection để deck không vượt quá 40 slide.
-
-% Căn đều (justify) toàn bộ các khối văn bản trong slide
-\apptocmd{\frame}{}{\justifying}{}
-\addtobeamertemplate{block begin}{}{\justifying}
-\makeatletter
-\apptocmd{\beamer@column}{\justifying}{}{}
-\makeatother
-
+\newcommand{\sourcenote}[1]{%
+  \par\vfill{\raggedright\color{Muted}\tiny #1\par}%
+}
+\newcommand{\correctmark}{\textcolor{CorrectGreen}{\textbf{Correct}}}
+\newcommand{\incorrectmark}{\textcolor{ErrorRed}{\textbf{Incorrect}}}
+\newcommand{\bluekey}[1]{\textcolor{SeminarBlue}{\textbf{#1}}}
+\newcommand{\sectionlabel}[1]{\textcolor{SeminarBlue}{\bfseries #1}}
+\newcounter{slidefigure}
+\newcounter{slidetable}
+\newcommand{\figcaption}[1]{%
+  \refstepcounter{slidefigure}\par\vspace{0.04cm}%
+  {\scriptsize\textbf{Figure \arabic{slidefigure}.} #1}\par%
+}
+\newcommand{\tabcaption}[1]{%
+  \refstepcounter{slidetable}\par\vspace{0.04cm}%
+  {\scriptsize\textbf{Table \arabic{slidetable}.} #1}\par%
+}
+\newcommand{\fixedfigcaption}[2]{\par\vspace{0.04cm}{\scriptsize\textbf{Figure #1.} #2}\par}
+\newcommand{\fixedtabcaption}[2]{\par\vspace{0.04cm}{\scriptsize\textbf{Table #1.} #2}\par}
+\setlength{\tabcolsep}{5pt}
+\renewcommand{\arraystretch}{1.13}
+\setbeamersize{text margin left=0.55cm,text margin right=0.55cm}
+\AtBeginEnvironment{frame}{\raggedright}

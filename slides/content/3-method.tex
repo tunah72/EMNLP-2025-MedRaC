@@ -1,0 +1,105 @@
+\section{MedRaC Methodology}
+
+\begin{frame}{MedRaC Overview}
+  \begin{columns}[c,onlytextwidth]
+    \column{0.73\textwidth}
+      \centering
+      \includegraphics[width=\linewidth,height=0.49\textheight,keepaspectratio]{paper_fig_3_medrac_pipeline.png}
+      \figcaption{MedRaC combines Formula RAG, value extraction, code generation, and execution.}
+    \column{0.23\textwidth}
+      \sectionlabel{Essential components}\par\vspace{0.10cm}
+      Formula RAG\\[0.08cm]
+      Value extraction\\[0.08cm]
+      Code generation\\[0.08cm]
+      Python execution
+      \vspace{0.18cm}
+
+      {\small Training-free and tool-augmented.}
+  \end{columns}
+  \vspace{0.12cm}
+  \centering
+  {\small MedRaC uses LLM inference and embedding retrieval; it does not introduce a new neural architecture or require fine-tuning.}
+  \sourcenote{\cite{wang2026medrac}}
+\end{frame}
+
+\begin{frame}{Formula Retrieval}
+  \begin{columns}[c,onlytextwidth]
+    \column{0.48\textwidth}
+      \begin{enumerate}
+        \item Encode the calculator question.
+        \item Retrieve the most similar formula document.
+        \item Condition subsequent stages on the retrieved formula.
+      \end{enumerate}
+    \column{0.48\textwidth}
+      \centering
+      {\Large
+      \begin{equation}
+        d^{\ast}=\arg\max_{d\in D}\operatorname{sim}(e_q,e_d)
+      \end{equation}}
+      {\small $e_q$: question embedding; $e_d$: formula-document embedding.}
+  \end{columns}
+  \sourcenote{\cite{wang2026medrac}}
+\end{frame}
+
+\begin{frame}{Value Extraction and Code Generation}
+  \centering
+  \vspace{0.12cm}
+  {\large
+  \begin{equation}
+    \underbrace{\text{Patient Note}}_{\text{clinical evidence}}
+    +\underbrace{\text{Question}}_{\text{calculator intent}}
+    +\underbrace{\text{Retrieved Formula}}_{\text{grounded method}}
+    \rightarrow \text{Structured Values}
+  \end{equation}}
+  \vspace{0.18cm}
+  {\large
+  \begin{equation}
+    \text{Retrieved Formula}+\text{Structured Values}+\text{Question}
+    \rightarrow \text{Python Code}
+  \end{equation}}
+  \vspace{0.22cm}
+
+  {\small The Patient Note supplies clinical evidence; the Question identifies the requested calculator and output.}
+  \sourcenote{\cite{wang2026medrac}}
+\end{frame}
+
+\begin{frame}[fragile]{Python-Assisted Calculation}
+  \begin{columns}[c,onlytextwidth]
+    \column{0.46\textwidth}
+      \sectionlabel{LLM responsibility}\par\vspace{0.12cm}
+      \begin{itemize}
+        \item Interpret the clinical text.
+        \item Identify the required patient values.
+        \item Translate the grounded formula into code.
+      \end{itemize}
+    \column{0.50\textwidth}
+      \sectionlabel{Execution responsibility}\par\vspace{0.12cm}
+      {\scriptsize\begin{verbatim}
+measured_na = 127
+glucose = 527
+result = measured_na + 0.024 * (glucose - 100)
+      \end{verbatim}
+      }
+      {\small Python deterministically executes the generated calculation and returns the numerical result.}
+  \end{columns}
+  \sourcenote{\cite{wang2026medrac}}
+\end{frame}
+
+\begin{frame}{How MedRaC Targets Errors}
+  \centering
+  \begin{tabular}{@{}>{\bfseries\raggedright\arraybackslash}p{0.25\textwidth}>{\raggedright\arraybackslash}p{0.61\textwidth}@{}}
+    \toprule
+    Component & Primary error addressed \\
+    \midrule
+    Formula RAG & Formula selection and hallucination \\
+    LLM value extraction & Required patient variables; remains interpretation-dependent \\
+    Code generation & Formula-to-program translation \\
+    Python execution & Arithmetic and operation-order errors \\
+    \bottomrule
+  \end{tabular}
+  \tabcaption{MedRaC components and their primary target errors.}
+  \vspace{0.36cm}
+
+  {\small MedRaC directly externalizes formula knowledge and arithmetic; extraction and clinical interpretation remain LLM-dependent.}
+  \sourcenote{\cite{wang2026medrac}}
+\end{frame}

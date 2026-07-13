@@ -1,0 +1,175 @@
+\section{Step-wise Evaluation Framework}
+
+\begin{frame}{Medical Calculation as a Multi-Stage Process}
+  \centering
+  \includegraphics[width=0.72\textwidth,height=0.51\textheight,keepaspectratio]{paper_fig_1_stepwise_evaluation.png}
+  \figcaption{Step-wise evaluation of Formula, Extraction, Calculation, and Answer.}
+  \vspace{0.02cm}
+
+  {\small
+  \bluekey{Patient Note + Question}
+  $\rightarrow$ \bluekey{F: Formula}
+  $\rightarrow$ \bluekey{E: Extraction}
+  $\rightarrow$ \bluekey{C: Calculation}
+  $\rightarrow$ \bluekey{A: Answer}}
+  {\small Each stage receives a separate correctness judgment, while later stages remain dependent on preceding outputs.}
+  \sourcenote{\cite{wang2026medrac}}
+\end{frame}
+
+\begin{frame}{Formula Selection and Value Extraction}
+  \begin{columns}[T,onlytextwidth]
+    \column{0.47\textwidth}
+      \sectionlabel{Formula selection, $F$}\par\vspace{0.12cm}
+      \begin{itemize}
+        \item Identify the intended calculator or scoring rule.
+        \item Specify its canonical formula, coefficients, units, and boundary conditions.
+        \item Compare the proposed formula with the 55-calculator reference library.
+      \end{itemize}
+      \vspace{0.16cm}
+      {\small Common failure: formula misselection or hallucination.}
+    \column{0.49\textwidth}
+      \sectionlabel{Value extraction, $E$}\par\vspace{0.12cm}
+      \begin{itemize}
+        \item Extract every required numerical and categorical variable.
+        \item Preserve units, demographic attributes, and clinical meaning.
+        \item Require complete agreement with the reference annotation.
+      \end{itemize}
+      \vspace{0.16cm}
+      {\small Common failure: missing, hallucinated, or incorrectly labelled variables.}
+  \end{columns}
+  \sourcenote{\cite{wang2026medrac}}
+\end{frame}
+
+\begin{frame}{Calculation Correctness Is Not Answer Correctness}
+  \begin{columns}[c,onlytextwidth]
+    \column{0.47\textwidth}
+      \sectionlabel{Calculation, $C$}\par\vspace{0.12cm}
+      Validity of arithmetic operations given the selected formula and extracted values.
+      \vspace{0.32cm}
+
+      \sectionlabel{Final answer, $A$}\par\vspace{0.12cm}
+      Agreement with the reference value under the paper's precision-aware rule, including valid unit conversions.
+    \column{0.47\textwidth}
+      \centering
+      {\large
+      \begin{equation}
+        V(C)=1,\quad V(F)=0,\quad V(A)=0
+      \end{equation}}
+      \vspace{0.16cm}
+      {\small Arithmetic may be internally consistent while implementing the wrong medical formula.}
+  \end{columns}
+  \vspace{0.22cm}
+  \centering
+  {\small \bluekey{Precision-aware tolerance:} $10.7\Rightarrow\epsilon=0.05$; $10.65\Rightarrow\epsilon=0.005$. Outputs with more than two decimals are rounded to two decimals for evaluation.}
+  \sourcenote{\cite{wang2026medrac}}
+\end{frame}
+
+\begin{frame}{Strict Overall Correctness}
+  \centering
+  \vspace{0.18cm}
+  {\Large
+  \begin{equation}
+    \kappa = V(F) \land V(E) \land V(C) \land V(A)
+  \end{equation}}
+  \vspace{0.20cm}
+
+  \begin{tabular}{ccccc}
+    \toprule
+    $V(F)$ & $V(E)$ & $V(C)$ & $V(A)$ & $\kappa$ \\
+    \midrule
+    True & True & True & True & \correctmark \\
+    True & True & False & True & \incorrectmark \\
+    False & True & True & True & \incorrectmark \\
+    \bottomrule
+  \end{tabular}
+  \tabcaption{Strict case correctness under the F--E--C--A decomposition.}
+  \sourcenote{\cite{wang2026medrac}}
+\end{frame}
+
+\begin{frame}{Conditional Correctness}
+  \centering
+  \vspace{0.16cm}
+  {\Large
+  \begin{equation}
+    CC_i = P\!\left(V(S_i)\mid V(S_1)\land\cdots\land V(S_{i-1})\right)
+  \end{equation}}
+  \vspace{0.22cm}
+
+  {\small\begin{columns}[T,onlytextwidth]
+    \column{0.47\textwidth}
+      \sectionlabel{Interpretation}\par
+      Reliability of stage $S_i$ after all preceding stages have succeeded.
+    \column{0.49\textwidth}
+      \sectionlabel{Example}\par
+      Calculation CC measures $P(V(C)\mid V(F)\land V(E))$, not the unconditional calculation accuracy.
+  \end{columns}}
+  \sourcenote{\cite{wang2026medrac}}
+\end{frame}
+
+\begin{frame}{First Error Attribution}
+  \centering
+  \vspace{0.12cm}
+  {\large
+  \begin{equation}
+    FE_i=P\!\left(V(S_1)\land\cdots\land V(S_{i-1})\land\neg V(S_i)\mid\neg\kappa\right)
+  \end{equation}}
+  \vspace{0.22cm}
+
+  {\small\bluekey{F} $\rightarrow$ \bluekey{E} $\rightarrow$ \bluekey{C} $\rightarrow$ \bluekey{A}}
+  \vspace{0.24cm}
+
+  Among strictly failed cases, each case is attributed to the earliest incorrect stage.
+  \sourcenote{\cite{wang2026medrac}}
+\end{frame}
+
+\begin{frame}{Structured Error Taxonomy}
+  \begin{columns}[c,onlytextwidth]
+    \column{0.57\textwidth}
+      \centering
+      \includegraphics[width=\linewidth,height=0.53\textheight,keepaspectratio]{paper_fig_2_error_taxonomy.png}
+      \figcaption{Eight error categories mapped to the calculation pipeline.}
+    \column{0.39\textwidth}
+      \sectionlabel{Knowledge and formula}\par
+      Formula Misselection or Hallucination
+      \vspace{0.16cm}
+
+      \sectionlabel{Extraction and interpretation}\par
+      Incorrect Variable Extraction; Clinical Misinterpretation; Missing Variable(s); Demographic Adjustment Failure
+      \vspace{0.16cm}
+
+      \sectionlabel{Numerical execution}\par
+      Unit Conversion; Arithmetic; Rounding / Precision
+  \end{columns}
+  \vspace{0.10cm}
+  \centering
+  {\small Multi-label error agreement is measured with Jaccard similarity:
+  $J(A,B)=\dfrac{|A\cap B|}{|A\cup B|}$.}
+  \sourcenote{\cite{wang2026medrac}}
+\end{frame}
+
+\begin{frame}{Equation-Based and Rule-Based Tasks}
+  \small
+  \begin{columns}[T,onlytextwidth]
+    \column{0.47\textwidth}
+      \sectionlabel{Equation-based}\par
+      \begin{equation}
+        y=f(x_1,x_2,\ldots,x_n)
+      \end{equation}
+      \begin{itemize}
+        \item Uses an explicit mathematical transformation.
+        \item Depends on units, coefficients, arithmetic, and rounding.
+        \item Supports deterministic execution directly.
+      \end{itemize}
+    \column{0.47\textwidth}
+      \sectionlabel{Rule-based}\par
+      \begin{equation}
+        \mathrm{Score}=\sum_{j=1}^{m}p_j
+      \end{equation}
+      \begin{itemize}
+        \item Maps clinical criteria to points or categories.
+        \item Requires threshold, presence, and interpretation decisions.
+        \item Is only partly addressed by numerical tools.
+      \end{itemize}
+  \end{columns}
+  \sourcenote{\cite{wang2026medrac}}
+\end{frame}

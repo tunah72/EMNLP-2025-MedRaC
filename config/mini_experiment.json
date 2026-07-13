@@ -1,0 +1,77 @@
+{
+  "name": "github-models-mini-comparison-v1",
+  "description": "Fixed retained rows for a seminar-scale Plain CoT versus MedRaC comparison.",
+  "expected_sample_count": 10,
+  "samples": [
+    {
+      "dataframe_index": 0,
+      "row_number": 1,
+      "calculator_id": "2",
+      "family": "equation",
+      "rationale": "Cockcroft-Gault equation; verified Phase 4 smoke sample."
+    },
+    {
+      "dataframe_index": 40,
+      "row_number": 41,
+      "calculator_id": "4",
+      "family": "rule",
+      "rationale": "CHA2DS2-VASc integer scoring rule."
+    },
+    {
+      "dataframe_index": 20,
+      "row_number": 21,
+      "calculator_id": "3",
+      "family": "equation",
+      "rationale": "CKD-EPI equation with conditional coefficients."
+    },
+    {
+      "dataframe_index": 120,
+      "row_number": 121,
+      "calculator_id": "8",
+      "family": "rule",
+      "rationale": "Wells PE rule with a decimal score."
+    },
+    {
+      "dataframe_index": 60,
+      "row_number": 61,
+      "calculator_id": "5",
+      "family": "equation",
+      "rationale": "Simple Mean Arterial Pressure equation."
+    },
+    {
+      "dataframe_index": 200,
+      "row_number": 201,
+      "calculator_id": "15",
+      "family": "rule",
+      "rationale": "Child-Pugh multi-criterion severity score."
+    },
+    {
+      "dataframe_index": 80,
+      "row_number": 81,
+      "calculator_id": "6",
+      "family": "equation",
+      "rationale": "BMI equation with unit conversion."
+    },
+    {
+      "dataframe_index": 100,
+      "row_number": 101,
+      "calculator_id": "7",
+      "family": "equation",
+      "rationale": "Corrected calcium equation."
+    },
+    {
+      "dataframe_index": 160,
+      "row_number": 161,
+      "calculator_id": "10",
+      "family": "equation",
+      "rationale": "Ideal body weight equation with demographic branch."
+    },
+    {
+      "dataframe_index": 280,
+      "row_number": 281,
+      "calculator_id": "19",
+      "family": "equation",
+      "rationale": "FIB-4 equation with square root."
+    }
+  ]
+}

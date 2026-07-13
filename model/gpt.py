@@ -8,7 +8,6 @@ from collections import deque
 from pydantic import BaseModel
 from dotenv import load_dotenv
 from openai import AsyncOpenAI, OpenAI as DeepseekClient, LengthFinishReasonError
-from transformers import AutoTokenizer
 from model.model import LLM
 import concurrent.futures
 from tqdm import tqdm
@@ -77,7 +76,10 @@ class APIModel(LLM):
                 base_url="https://api.deepseek.com",
             )
             self.deepseek_executor = concurrent.futures.ThreadPoolExecutor(max_workers=100)
-            self.tokenizer = AutoTokenizer.from_pretrained("deepseek-ai/deepseek-llm-7b-base")
+            # Keep the API-only path independent of the large local-model stack.
+            # This tokenizer is used only for local estimates; provider usage
+            # values remain authoritative after each request.
+            self.tokenizer = tiktoken.get_encoding("cl100k_base")
         else:
             self.api_key  = os.getenv("OPENAI_API_KEY")
             self.client   = AsyncOpenAI(api_key=self.api_key)

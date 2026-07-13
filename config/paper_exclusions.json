@@ -1,0 +1,23 @@
+{
+  "version": 1,
+  "description": "Non-destructive policy reproducing the repository's 108-row removal and 940-row retained cohort.",
+  "sources": [
+    "Paper Appendix A: Removed Data List and Reasons",
+    "utils/remove_bad_data.py:12-71"
+  ],
+  "exclude_calculator_ids": {
+    "11": "QTc Bazett unit mismatch",
+    "13": "Estimated Due Date targets use an incorrect equation",
+    "28": "APACHE II scoring-rule mismatch",
+    "36": "Caprini female-sex scoring mismatch"
+  },
+  "exclude_row_numbers": {
+    "236": "Repository-specific explicit exclusion",
+    "451": "Incorrect FeverPAIN ground-truth answer"
+  },
+  "exclude_negative_decimal_ground_truth": true,
+  "negative_decimal_reason": "Negative decimal cases affected by invalid or reversed benchmark bounds",
+  "expected_source_rows": 1048,
+  "expected_excluded_rows": 108,
+  "expected_retained_rows": 940
+}

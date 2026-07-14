@@ -1,161 +1,97 @@
-\section{Experiments and Results}
+\begin{frame}{Experimental Setup for Calculation and Clinical Scoring}
+  \raggedright
+  \begin{table}
+    \caption{Paper experimental setup.}
+    \label{tab:paper-setup}
+    \begin{tabular}{@{}>{\bfseries\raggedright\arraybackslash}p{0.25\textwidth}>{\raggedright\arraybackslash}p{0.62\textwidth}@{}}
+      \toprule
+      Benchmark & 55 medical calculators; 1,048 original cases, 940 after cleaning \\
+      Task types & Equation-based and rule-based \\
+      Methods & Direct, CoT, One-shot, Self-Refine, MedPrompt, MedRaC \\
+      Models & Multiple open and closed LLMs \\
+      Evaluation & Final-answer and LLM step-wise evaluation \\
+      \bottomrule
+    \end{tabular}
+  \end{table}
+  \vfill
+  {\large\bfseries\color{DeepBlue}The benchmark tests both deterministic calculation and clinical scoring.}
+\end{frame}
 
-\begin{frame}{Dataset and Benchmark Cleanup}
-  \centering
-  {\Large\bfseries 1,048 cases}
-  \quad$\longrightarrow$\quad
-  {\color{ErrorRed}\Large\bfseries 108 removed}
-  \quad$\longrightarrow$\quad
-  {\color{SeminarBlue}\Large\bfseries 940 retained}
-  \vspace{0.38cm}
+\begin{frame}{Main Results Across Models and Prompting Methods}
+  \raggedright
+  \begin{table}
+    \includegraphics[width=0.98\textwidth,height=0.47\textheight,keepaspectratio]{paper_table_1_main_results.png}
+    \caption{Main performance results across models and methods.}
+    \label{tab:paper-main-results}
+  \end{table}
+  \vspace{0.04cm}
+  \sectionlabel{Overall main result}\par\vspace{0.06cm}
+  \small MedRaC consistently improves calculation accuracy across the reported models, with the largest gains for smaller open models. Rule-based results are mixed, confirming that clinical interpretation remains the limiting capability.
+\end{frame}
 
+\begin{frame}{Main Result: MedRaC Improves Equation-Based Tasks}
+  \raggedright
+  \begin{table}
+    \caption{Paper-reported equation-based accuracy (\%).}
+    \label{tab:selected-paper-results}
+    \begin{tabular}{lrrr}
+      \toprule
+      Model & One-shot & MedRaC & Gain \\
+      \midrule
+      Phi-4-mini & 16.47 & \textbf{68.39} & \textbf{+51.92} \\
+      LLaMA3.1-8B & 20.97 & \textbf{70.22} & \textbf{+49.25} \\
+      GPT-4o & 54.24 & \textbf{64.39} & \textbf{+10.15} \\
+      \bottomrule
+    \end{tabular}
+  \end{table}
+  \vspace{0.18cm}
+  \sectionlabel{Main finding}\par\vspace{0.08cm}
+  Formula grounding and deterministic execution increase equation-based accuracy by \textbf{10.15--51.92 percentage points}.\par\vspace{0.18cm}
+  \small Rule-based gains remain mixed because clinical interpretation still dominates scoring.
+\end{frame}
+
+\begin{frame}{Step-Wise Evaluation Aligns Closely with Expert Judgment}
+  \raggedright
+  \begin{table}
+    \caption{LLM--Expert agreement across evaluation stages (\%).}
+    \label{tab:llm-expert-agreement}
+    \begin{tabular}{lrrrr}
+      \toprule
+      Agreement type & Formula & Extraction & Calculation & Answer \\
+      \midrule
+      Expert--Expert & 84.8 & 84.8 & 89.1 & 95.7 \\
+      Expert--Non-Expert & 72.3 & 78.1 & 66.6 & 91.3 \\
+      \textbf{LLM--Expert} & \textbf{90.2} & 78.3 & 88.1 & \textbf{97.8} \\
+      \bottomrule
+    \end{tabular}
+  \end{table}
+  \vspace{0.28cm}
   \begin{columns}[T,onlytextwidth]
-    \column{0.47\textwidth}
-      \sectionlabel{Benchmark scope}\par
-      \begin{itemize}
-        \item 55 medical calculators sourced from MDCalc.
-        \item Equation-based and rule-based cases.
-        \item 940 cases retained after benchmark curation.
-      \end{itemize}
-    \column{0.49\textwidth}
-      \sectionlabel{Representative exclusions}\par
-      \begin{itemize}
-        \item Mistyped gestational-age equation.
-        \item Incorrect APACHE II threshold.
-        \item Reversed limits for negative answers.
-        \item QTc unit mismatch and invalid Caprini scoring.
-      \end{itemize}
+    \column{0.28\textwidth}
+      \sectionlabel{Validation set}\par
+      46 samples; five calculators.
+    \column{0.62\textwidth}
+      \sectionlabel{Interpretation}\par
+      Alignment is strongest for Formula and Answer; Extraction remains the hardest stage.
   \end{columns}
-  \sourcenote{\cite{wang2026medrac}}
 \end{frame}
 
-\begin{frame}{Experimental Setup}
-  \small
-  \begin{tabular}{@{}>{\bfseries\raggedright\arraybackslash}p{0.20\textwidth}>{\raggedright\arraybackslash}p{0.74\textwidth}@{}}
-    \toprule
-    Cohort & 940 retained MedCalc-Bench cases; rule-based and calculation-based tasks \\
-    Models & Phi-4-mini; LLaMA3.2-3B; Qwen3-4B/8B/14B; LLaMA3.1-8B; GPT-4o-mini; GPT-4o \\
-    Methods & Direct; Zero-shot CoT; One-shot; Self-Refine ($\leq 5$ rounds); MedPrompt ($k=3$); MedRaC \\
-    Step-wise judge & DeepSeek-chat \\
-    Error-type judge & DeepSeek-reasoner \\
-    Inference & No training; GPT defaults; open-source models: temperature 0.6, top-p 0.95, repetition penalty 1.0 \\
-    Hardware & Two NVIDIA RTX A6000 GPUs for local open-source inference \\
-    \bottomrule
-  \end{tabular}
-  \tabcaption{Paper experimental configuration.}
-  \sourcenote{\cite{wang2026medrac}}
-\end{frame}
-
-\begin{frame}{Main Results}
-  \centering
-  \includegraphics[width=0.96\textwidth,height=0.47\textheight,keepaspectratio]{paper_table_1_main_results.pdf}
-  \tabcaption{Paper-reported accuracy across models and prompting methods (\%).}
-  \vspace{0.12cm}
-  \begin{columns}[T,onlytextwidth]
-    \column{0.49\textwidth}
-      \sectionlabel{Calculation-based}\par\vspace{0.05cm}
-      {\small MedRaC has the highest reported Calc accuracy for all seven models with complete results.}
-    \column{0.47\textwidth}
-      \sectionlabel{Rule-based}\par\vspace{0.05cm}
-      {\small Gains vary by model; One-shot is higher for Qwen3-14B and GPT-4o.}
-  \end{columns}
-  \vspace{0.14cm}
-  {\scriptsize\color{Muted}\textbf{Metric note.} Direct uses final-answer scoring. Reasoning-based methods use step-wise automatic evaluation.}
-  \sourcenote{\cite{wang2026medrac}}
-\end{frame}
-
-\begin{frame}{Equation-Based and Rule-Based Performance}
-  \centering
-  {\scriptsize
-  \begin{tabular}{lrrrr}
-    \toprule
-    & \multicolumn{2}{c}{Rule-based} & \multicolumn{2}{c}{Calculation-based} \\
-    \cmidrule(lr){2-3}\cmidrule(lr){4-5}
-    Model & One-shot & MedRaC & One-shot & MedRaC \\
-    \midrule
-    Phi-4-mini & 12.09 & \textbf{35.10} & 16.47 & \textbf{68.39} \\
-    LLaMA3.1-8B & 25.07 & \textbf{31.27} & 20.97 & \textbf{70.22} \\
-    Qwen3-14B & \textbf{60.77} & 50.44 & 67.05 & \textbf{78.37} \\
-    GPT-4o & \textbf{62.24} & 51.03 & 54.24 & \textbf{64.39} \\
-    \bottomrule
-  \end{tabular}}
-  \tabcaption{Selected one-shot and MedRaC accuracy values from the main results (\%).}
-  \vspace{0.08cm}
-
-  \begin{columns}[T,onlytextwidth]
-    \column{0.47\textwidth}
-      \sectionlabel{Equation-based}\par
-      Deterministic execution directly addresses dominant numerical errors.
-    \column{0.49\textwidth}
-      \sectionlabel{Rule-based}\par
-      One-shot examples may better demonstrate how clinical findings map to scoring criteria.
-  \end{columns}
-  \sourcenote{\cite{wang2026medrac}}
-\end{frame}
-
-\begin{frame}{Error Reduction}
+\begin{frame}{Error Reductions Reveal MedRaC's Remaining Boundary}
   \begin{columns}[c,onlytextwidth]
-    \column{0.69\textwidth}
+    \column{0.67\textwidth}
       \centering
-      \includegraphics[width=\linewidth,height=0.56\textheight,keepaspectratio]{paper_fig_4_llama_error_counts.png}
-      \figcaption{Error counts for LLaMA3.1-8B-Instruct with and without MedRaC.}
-    \column{0.27\textwidth}
-      \sectionlabel{MedRaC reductions}\par\vspace{0.12cm}
-      Formula\\
-      $-587$ ($-77.5\%$)\\[0.18cm]
-      Arithmetic\\
-      $-352$ ($-82.6\%$)\\[0.18cm]
-      Demographic adjustment\\
-      $-105$ ($-70.9\%$)
-  \end{columns}
-  \vspace{0.10cm}
-  {\small \bluekey{Residual bottlenecks:} incorrect extraction falls by $21.3\%$; clinical misinterpretation falls by $26.9\%$. Both reductions are smaller than those for formula and arithmetic errors.}
-  \sourcenote{\cite{wang2026medrac}}
-\end{frame}
-
-\begin{frame}{Ablations Isolate the Roles of Retrieval and Execution}
-  \begin{columns}[T,onlytextwidth]
-    \column{0.49\textwidth}
-      \centering
-      \sectionlabel{Remove Formula RAG}\par\vspace{0.10cm}
-      \includegraphics[width=\linewidth,height=0.36\textheight,keepaspectratio,trim=0 30bp 0 0,clip]{paper_table_5_rag_ablation.png}
-      \tabcaption{Ablation without Formula RAG.}
-      \vspace{0.08cm}
-      {\small
-      \textbf{Accuracy:} $64.68\%\rightarrow25.64\%$ ($-39.04$ pp)\\[0.06cm]
-      \textbf{Formula FE:} $20.78\%\rightarrow71.96\%$}
-    \column{0.49\textwidth}
-      \centering
-      \sectionlabel{Remove Code Execution}\par\vspace{0.10cm}
-      \includegraphics[width=\linewidth,height=0.36\textheight,keepaspectratio,trim=0 22bp 0 0,clip]{paper_table_6_code_ablation.png}
-      \tabcaption{Ablation without code execution.}
-      \vspace{0.08cm}
-      {\small
-      \textbf{Accuracy:} $64.68\%\rightarrow53.09\%$ ($-11.59$ pp)\\[0.06cm]
-      \textbf{Calculation FE:} $3.23\%\rightarrow31.88\%$}
-  \end{columns}
-  \vspace{0.22cm}
-  \centering
-  {\small \bluekey{Interpretation:} retrieval primarily protects formula selection; execution primarily protects calculation.}
-  \sourcenote{\cite{wang2026medrac}}
-\end{frame}
-
-\begin{frame}{LLM-as-Judge Validation}
-  \centering
-  \includegraphics[width=0.76\textwidth,height=0.35\textheight,keepaspectratio,trim=0 34bp 0 0,clip]{paper_table_2_judge_validation.png}
-  \tabcaption{Agreement between expert and LLM step-wise judgments (\%).}
-  \vspace{0.16cm}
-
-  \begin{columns}[T,onlytextwidth]
-    \column{0.22\textwidth}
-      \sectionlabel{Validation set}\par\vspace{0.05cm}
-      {\small 46 samples from five calculators.}
-    \column{0.43\textwidth}
-      \sectionlabel{LLM--Expert agreement}\par\vspace{0.05cm}
-      {\small F/E/C/A: $90.2/78.3/88.1/97.8\%$. Extraction is lowest and only $0.2$ pp above Expert--Non-Expert agreement.}
+      \begin{figure}
+        \includegraphics[width=\linewidth,height=0.50\textheight,keepaspectratio]{paper_fig_4_llama_error_counts.png}
+        \caption{Error reduction with MedRaC.}
+        \label{fig:error-reduction}
+      \end{figure}
     \column{0.29\textwidth}
-      \sectionlabel{Reliability caveat}\par\vspace{0.05cm}
-      {\small The paper reports percent agreement, not a chance-corrected coefficient.}
+      \sectionlabel{Large reductions}\par
+      Formula\par Arithmetic\par Demographic adjustment\vspace{0.18cm}
+      \sectionlabel{Remaining boundary}\par
+      Incorrect extraction\par Clinical misinterpretation
   \end{columns}
-  \sourcenote{\cite{wang2026medrac}}
+  \vfill
+  \centering
+  {\large\bfseries\color{DeepBlue}MedRaC solves tool-addressable errors better than interpretation-dependent errors.}
 \end{frame}

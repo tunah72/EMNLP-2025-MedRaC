@@ -40,8 +40,9 @@
 \setbeamertemplate{equations}[numbered]
 \setbeamertemplate{caption}[numbered]
 \captionsetup{labelfont={bf,color=Ink},textfont={color=Ink}}
+\captionsetup{font=scriptsize,skip=2pt,justification=centering,singlelinecheck=false}
 
-% Full-width title bar. Section context is shown only in the footer.
+% Full-width title bar. Section context remains secondary in the footer.
 \setbeamertemplate{frametitle}{%
   \nointerlineskip%
   \begin{beamercolorbox}[wd=\paperwidth,ht=0.76cm,dp=0.20cm,leftskip=0.55cm,rightskip=0.55cm]{frametitle}%
@@ -49,6 +50,12 @@
   \end{beamercolorbox}%
 }
 
+\newif\ifshowsectionfooter
+\showsectionfootertrue
+\newcommand{\sectionnavlabel}{%
+  \ifcase\value{section}\or Motivation and Research Problem\or Evaluation Framework\or MedRaC Methodology\or Paper Experiments and Results\or Local Demo and Mini-Experiment\or Discussion and Conclusion\fi}
+\newcommand{\footcontext}{%
+  \ifshowsectionfooter\textbf{\sectionnavlabel}\fi}
 \setbeamertemplate{footline}{%
   \leavevmode%
   \hbox{%
@@ -56,11 +63,7 @@
       \color{white}\scriptsize Group K23
     \end{beamercolorbox}%
     \begin{beamercolorbox}[wd=.72\paperwidth,ht=2.35ex,dp=.95ex,center]{title in head/foot}%
-      \color{white}\scriptsize\ifnum\insertsectionnumber>0
-        \textbf{\insertsectionnumber. \insertsectionhead}%
-      \else
-        Scientific Paper Presentation
-      \fi
+      \color{white}\scriptsize\footcontext
     \end{beamercolorbox}%
     \begin{beamercolorbox}[wd=.12\paperwidth,ht=2.35ex,dp=.95ex,center]{date in head/foot}%
       \color{white}\scriptsize \insertframenumber
@@ -69,24 +72,27 @@
 }
 
 \setbeamertemplate{title page}{%
-  \vspace{0.05cm}
+  \vspace{0.03cm}
   \centering
-  \includegraphics[width=0.25\textwidth]{fit_hcmus_logo.png}\par
-  \vspace{0.18cm}
-  \begin{beamercolorbox}[wd=0.92\paperwidth,sep=0.24cm,center]{title}%
+  \includegraphics[width=0.19\textwidth]{fit_hcmus_logo.png}\par
+  \vspace{0.10cm}
+  \begin{beamercolorbox}[wd=0.92\paperwidth,sep=0.19cm,center]{title}%
     {\usebeamerfont{title}\inserttitle\par}
     \vspace{0.06cm}
     {\footnotesize\insertsubtitle\par}
   \end{beamercolorbox}
-  \vspace{0.16cm}
+  \vspace{0.12cm}
   {\small\bfseries\insertauthor\par}
   {\scriptsize\color{Muted}\paperVenue\par}
-  \vspace{0.13cm}
+  \vspace{0.10cm}
   {\small\bfseries Group K23\par}
   {\scriptsize\groupMembers\par}
-  \vspace{0.11cm}
-  {\scriptsize\insertinstitute\par}
-  {\scriptsize\color{Muted}\courseInfo\enspace|\enspace\insertdate\par}
+  \vspace{0.06cm}
+  {\scriptsize\supervisors\par}
+  \vspace{0.06cm}
+  {\scriptsize\courseInfo\enspace|\enspace\insertdate\par}
+  \vspace{0.08cm}
+  {\tiny\color{Muted}Based on Wang et al., 2026, arXiv v2.\par}
 }
 
 \newcommand{\sourcenote}[1]{%
@@ -96,18 +102,6 @@
 \newcommand{\incorrectmark}{\textcolor{ErrorRed}{\textbf{Incorrect}}}
 \newcommand{\bluekey}[1]{\textcolor{SeminarBlue}{\textbf{#1}}}
 \newcommand{\sectionlabel}[1]{\textcolor{SeminarBlue}{\bfseries #1}}
-\newcounter{slidefigure}
-\newcounter{slidetable}
-\newcommand{\figcaption}[1]{%
-  \refstepcounter{slidefigure}\par\vspace{0.04cm}%
-  {\scriptsize\textbf{Figure \arabic{slidefigure}.} #1}\par%
-}
-\newcommand{\tabcaption}[1]{%
-  \refstepcounter{slidetable}\par\vspace{0.04cm}%
-  {\scriptsize\textbf{Table \arabic{slidetable}.} #1}\par%
-}
-\newcommand{\fixedfigcaption}[2]{\par\vspace{0.04cm}{\scriptsize\textbf{Figure #1.} #2}\par}
-\newcommand{\fixedtabcaption}[2]{\par\vspace{0.04cm}{\scriptsize\textbf{Table #1.} #2}\par}
 \setlength{\tabcolsep}{5pt}
 \renewcommand{\arraystretch}{1.13}
 \setbeamersize{text margin left=0.55cm,text margin right=0.55cm}

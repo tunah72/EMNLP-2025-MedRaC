@@ -1,54 +1,47 @@
-\section{Discussion and Conclusion}
-
-\begin{frame}{Scope, Limitations, and Evaluation Caveats}
-  \small
+\begin{frame}{Discussion}
+  \vspace{0.16cm}
   \begin{columns}[T,onlytextwidth]
-    \column{0.49\textwidth}
-      \sectionlabel{Paper scope and evaluation caveats}\par\vspace{0.10cm}
+    \column{0.46\textwidth}
+      \sectionlabel{Limitations}\par\vspace{0.10cm}
       \begin{itemize}
-        \item Structured, single-turn tasks; curated English notes, not noisy EHR or multilingual data.
-        \item LLM-as-Judge; human validation: 46 cases, percent agreement only.
-        \item Point estimates only; no confidence intervals or significance tests.
-        \item Requires an accurate, current formula bank.
-        \item Public, de-identified data; research only, not clinical deployment.
+        \item Structured, English-only cases
+        \item Dependence on formula-bank quality
+        \item Dependence on an LLM Judge
+        \item Limited human validation
       \end{itemize}
-    \column{0.47\textwidth}
-      \sectionlabel{Local experiment limitations}\par\vspace{0.10cm}
+    \column{0.46\textwidth}
+      \sectionlabel{Future work}\par\vspace{0.10cm}
       \begin{itemize}
-        \item Ten fixed cases; no basis for statistical inference.
-        \item Model substitution through GitHub Models and a separate 55-formula index.
-        \item Post-hoc step-wise evaluation by an LLM Judge, not human annotators.
-        \item One timeout repair and one answer adjudication are documented in the artifacts.
-        \item Not a paper-exact reproduction.
+        \item Stronger clinical interpretation
+        \item Broader human validation
+        \item Richer formula knowledge
+        \item Human-in-the-loop evaluation
       \end{itemize}
   \end{columns}
-  \sourcenote{\cite{wang2026medrac}}
+  \vfill
+  \centering
+  {\large\bfseries\color{DeepBlue}Reliable medical AI requires tools and clinically grounded interpretation.}
 \end{frame}
 
 \begin{frame}{Conclusions}
-  \vspace{0.08cm}
+  \vspace{0.20cm}
   \begin{enumerate}
-    \item \textbf{Final-answer accuracy is insufficient for evaluating medical calculations.}
-    \vspace{0.14cm}
-    \item \textbf{F--E--C--A evaluation, CC, and FE identify conditional reliability and the earliest failed stage.}
-    \vspace{0.14cm}
-    \item \textbf{MedRaC reduces formula and arithmetic errors. Extraction and clinical interpretation remain bottlenecks.}
-  \end{enumerate}
-  \vspace{0.42cm}
-  \centering
-  {\Large\bfseries\color{DeepBlue} End-task scoring should be complemented by domain-grounded process evaluation.}
-  \sourcenote{\cite{wang2026medrac}}
-\end{frame}
-
-\begin{frame}{Questions and Discussion}
-  \vspace{0.12cm}
-  \begin{enumerate}
-    \item Is the F--E--C--A decomposition sufficient for more complex clinical reasoning workflows?
-    \item How should an LLM-as-Judge be calibrated before it is used for high-stakes evaluation?
-    \item How can a formula bank remain versioned, guideline-aware, and clinically auditable?
+    \item \textbf{Final-answer accuracy can mask clinically relevant reasoning errors.}
+    \vspace{0.20cm}
+    \item \textbf{Step-wise evaluation makes Formula, Extraction, Calculation, and Answer failures measurable.}
+    \vspace{0.20cm}
+    \item \textbf{MedRaC improves formula grounding and arithmetic reliability; clinical interpretation remains open.}
   \end{enumerate}
   \vfill
   \centering
-  {\small Group K23 \enspace|\enspace Faculty of Information Technology\\University of Science, VNU-HCM}
-  \vspace{0.18cm}
+  {\Large\bfseries\color{DeepBlue}Reliable medical AI requires correct outputs and verifiable processes.}
+\end{frame}
+
+\begin{frame}{Thank You --- Questions and Discussion}
+  \vfill
+  \centering
+  {\Large\bfseries\color{DeepBlue}Thank you}\\[0.24cm]
+  {\large Questions and Discussion}\\[0.42cm]
+  {\small Group K23 \enspace|\enspace Deep Learning Seminar\\University of Science, VNU-HCM}
+  \vfill
 \end{frame}

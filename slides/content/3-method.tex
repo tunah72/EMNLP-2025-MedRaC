@@ -1,113 +1,35 @@
-\section{MedRaC Methodology}
-
-\begin{frame}{MedRaC Overview}
-  \begin{columns}[c,onlytextwidth]
-    \column{0.73\textwidth}
-      \centering
-      \includegraphics[width=\linewidth,height=0.49\textheight,keepaspectratio]{paper_fig_3_medrac_pipeline.png}
-      \figcaption{MedRaC combines Formula RAG, value extraction, code generation, and execution.}
-    \column{0.23\textwidth}
-      \sectionlabel{Essential components}\par\vspace{0.10cm}
-      Formula RAG\\[0.08cm]
-      Value extraction\\[0.08cm]
-      Code generation\\[0.08cm]
-      Python execution
-      \vspace{0.18cm}
-
-      {\small Training-free and tool-augmented.}
-  \end{columns}
-  \vspace{0.12cm}
+\begin{frame}{MedRaC Grounds Formulas and Executes Calculations}
   \centering
-  {\small MedRaC is a training-free inference pipeline; it does not introduce a new neural architecture.}
-  \sourcenote{\cite{wang2026medrac}}
-\end{frame}
-
-\begin{frame}{Formula Retrieval}
-  \vspace{0.08cm}
-  \begin{columns}[T,onlytextwidth]
-    \column{0.54\textwidth}
-      \sectionlabel{Retrieval procedure}\par\vspace{0.12cm}
-      \begin{enumerate}
-        \item Encode the calculator question as $e_q$.
-        \item Retrieve $d^{\ast}$, the nearest formula document in $D$.
-        \item Ground value extraction and code generation in $d^{\ast}$.
-      \end{enumerate}
-    \column{0.42\textwidth}
-      \centering
-      \sectionlabel{Nearest-neighbor objective}\par\vspace{0.20cm}
-      {\large
-      \begin{equation}
-        d^{\ast}=\arg\max_{d\in D}\operatorname{sim}(e_q,e_d)
-      \end{equation}}
-      \vspace{0.18cm}
-      {\small
-      \begin{tabular}{@{}>{$}l<{$}@{\;:\;}l@{}}
-        e_q & question embedding \\
-        e_d & formula-document embedding
-      \end{tabular}}
-  \end{columns}
-  \sourcenote{\cite{wang2026medrac}}
-\end{frame}
-
-\begin{frame}{Value Extraction and Code Generation}
-  \centering
-  \vspace{0.12cm}
-  {\large
-  \begin{equation}
-    \underbrace{\text{Patient Note}}_{\text{clinical evidence}}
-    +\underbrace{\text{Question}}_{\text{calculator intent}}
-    +\underbrace{\text{Retrieved Formula}}_{\text{grounded method}}
-    \rightarrow \text{Structured Values}
-  \end{equation}}
-  \vspace{0.18cm}
-  {\large
-  \begin{equation}
-    \text{Retrieved Formula}+\text{Structured Values}+\text{Question}
-    \rightarrow \text{Python Code}
-  \end{equation}}
-  \vspace{0.22cm}
-
-  {\small The Patient Note supplies clinical evidence; the Question identifies the requested calculator and output.}
-  \sourcenote{\cite{wang2026medrac}}
-\end{frame}
-
-\begin{frame}[fragile]{Python-Assisted Calculation}
-  \begin{columns}[c,onlytextwidth]
-    \column{0.46\textwidth}
-      \sectionlabel{LLM responsibility}\par\vspace{0.12cm}
-      \begin{itemize}
-        \item Interpret the clinical text.
-        \item Identify the required patient values.
-        \item Translate the grounded formula into code.
-      \end{itemize}
-    \column{0.50\textwidth}
-      \sectionlabel{Execution responsibility}\par\vspace{0.12cm}
-      {\scriptsize\begin{verbatim}
-measured_na = 127
-glucose = 527
-result = measured_na + 0.024 * (glucose - 100)
-      \end{verbatim}
-      }
-      {\small Python deterministically executes the generated calculation and returns the numerical result.}
-  \end{columns}
-  \sourcenote{\cite{wang2026medrac}}
-\end{frame}
-
-\begin{frame}{How MedRaC Targets Errors}
-  \centering
-  \begin{tabular}{@{}>{\bfseries\raggedright\arraybackslash}p{0.25\textwidth}>{\raggedright\arraybackslash}p{0.61\textwidth}@{}}
-    \toprule
-    Component & Primary error addressed \\
-    \midrule
-    Formula RAG & Formula selection and hallucination \\
-    LLM value extraction & Required patient variables; remains interpretation-dependent \\
-    Code generation & Formula-to-program translation \\
-    Python execution & Arithmetic and operation-order errors \\
-    \bottomrule
+  \begin{figure}
+    \includegraphics[width=0.75\textwidth,height=0.46\textheight,keepaspectratio]{paper_fig_3_medrac_pipeline.png}
+    \caption{MedRaC architecture.}
+    \label{fig:medrac-architecture}
+  \end{figure}
+  \vspace{-0.10cm}
+  \begin{tabular}{cccc}
+    Retrieve formula & Extract values & Generate code & Execute code \\
+    \small grounding & \small clinical text & \small formula to program & \small deterministic result
   \end{tabular}
-  \tabcaption{MedRaC components and their primary target errors.}
-  \vspace{0.36cm}
+  \vfill
+  {\large\bfseries\color{DeepBlue}The LLM interprets clinical text; tools ground formulas and compute deterministically.}
+\end{frame}
 
-  {\small MedRaC externalizes formula knowledge and arithmetic. Extraction and clinical interpretation remain LLM-dependent.}
-  \sourcenote{\cite{wang2026medrac}}
+\begin{frame}{Each MedRaC Component Targets a Distinct Failure Mode}
+  \raggedright
+  \begin{table}
+    \caption{MedRaC components and targeted failures.}
+    \label{tab:targeted-failures}
+    \begin{tabular}{@{}>{\bfseries\raggedright\arraybackslash}p{0.30\textwidth}>{\raggedright\arraybackslash}p{0.58\textwidth}@{}}
+      \toprule
+      Component & Targeted failure \\
+      \midrule
+      Formula RAG & Formula misselection and hallucination \\
+      Value extraction & Missing or incorrect inputs \\
+      Code generation & Formula-to-computation translation \\
+      Python execution & Arithmetic errors \\
+      \bottomrule
+    \end{tabular}
+  \end{table}
+  \vfill
+  {\large\bfseries\color{DeepBlue}Interpretation-dependent errors remain difficult.}
 \end{frame}

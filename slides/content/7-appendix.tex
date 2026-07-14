@@ -1,100 +1,114 @@
-\section{Appendix}
-
 \begin{frame}{Appendix: Complete Main-Results Table}
   \centering
-  \includegraphics[width=0.98\textwidth,height=0.69\textheight,keepaspectratio]{paper_table_1_main_results.pdf}
-  \fixedtabcaption{4}{Complete paper-reported accuracy results (paper Table 1; \%).}
-  \vspace{0.10cm}
-  {\scriptsize Direct uses final-answer scoring, whereas reasoning-based methods use step-wise automatic evaluation.}
-  \sourcenote{\cite{wang2026medrac}}
+  \begin{table}
+    \includegraphics[width=0.98\textwidth,height=0.64\textheight,keepaspectratio]{paper_table_1_main_results.pdf}
+    \caption{Complete paper-reported accuracy results (\%).}
+    \label{tab:app-main-results}
+  \end{table}
+  \vspace{-0.08cm}
+  {\scriptsize Direct uses final-answer scoring; reasoning-based methods use step-wise automatic evaluation.}
+  \sourcenote{Table~\ref{tab:app-main-results}. Source: Wang et al., paper Table 1.}
 \end{frame}
 
-\begin{frame}{Appendix: Complete Metric Definitions}
+\begin{frame}{Appendix: Detailed Evaluation Metrics}
   \sectionlabel{Strict correctness}\par
-  \begin{equation}
-    \kappa=V(F)\land V(E)\land V(C)\land V(A)
-  \end{equation}
+  \small Main-deck Equation~\eqref{eq:strict-correctness} defines strict correctness.\par\vspace{0.12cm}
   \sectionlabel{Conditional Correctness}\par
   \begin{equation}
     CC_i=P\!\left(V(S_i)\mid V(S_1)\land\cdots\land V(S_{i-1})\right)
+    \label{eq:app-conditional-correctness}
   \end{equation}
-  \sectionlabel{First Error Attribution Rate}\par
+  \sectionlabel{First Error Attribution}\par
   \begin{equation}
     FE_i=P\!\left(V(S_1)\land\cdots\land V(S_{i-1})\land\neg V(S_i)\mid\neg\kappa\right)
+    \label{eq:app-first-error-attribution}
   \end{equation}
-  \sourcenote{\cite{wang2026medrac}}
+  \sourcenote{Equations~\ref{eq:app-conditional-correctness}--\ref{eq:app-first-error-attribution}. Source: \cite{wang2026medrac}, Section 3.1.}
+\end{frame}
+
+\begin{frame}{Appendix: LLM-as-Judge Validation}
+  \centering
+  \begin{table}
+    \includegraphics[width=0.76\textwidth,height=0.35\textheight,keepaspectratio,trim=0 34bp 0 0,clip]{paper_table_2_judge_validation.png}
+    \caption{Agreement between expert and LLM step-wise judgments (\%).}
+    \label{tab:app-judge-validation}
+  \end{table}
+  \vspace{0.08cm}
+  \begin{columns}[T,onlytextwidth]
+    \column{0.28\textwidth}
+      \sectionlabel{Validation set}\par
+      \small 46 samples from five calculators.
+    \column{0.35\textwidth}
+      \sectionlabel{LLM--Expert agreement}\par
+      \small F/E/C/A: 90.2/78.3/88.1/97.8\%.
+    \column{0.29\textwidth}
+      \sectionlabel{Caveat}\par
+      \small Percent agreement, not chance-corrected reliability.
+  \end{columns}
+  \sourcenote{Table~\ref{tab:app-judge-validation}. Source: Wang et al., paper Table 2.}
 \end{frame}
 
 \begin{frame}{Appendix: Paper Discrepancies}
   \small
-  \begin{tabular}{@{}>{\raggedright\arraybackslash}p{0.18\textwidth}>{\raggedright\arraybackslash}p{0.36\textwidth}>{\raggedright\arraybackslash}p{0.38\textwidth}@{}}
-    \toprule
-    Topic & Conflicting statements & Consequence \\
-    \midrule
-    Source cohort & Section 2: 1,047 vignettes; Section 4 and Appendix A: 1,048 & The reported cleanup total differs by one source case \\
-    Formula CC without RAG & Section 5 prose: 7.34\%; Table 5: 46.49\% & The no-RAG Formula CC value cannot be uniquely reconciled \\
-    \bottomrule
-  \end{tabular}
-  \tabcaption{Numerical inconsistencies identified in the paper.}
-  \vspace{0.40cm}
-
-  No numerical reconciliation is inferred when the paper does not provide one.
-  \sourcenote{\cite{wang2026medrac}}
+  \begin{table}
+    \caption{Numerical discrepancies identified in the paper.}
+    \label{tab:app-paper-discrepancies}
+    \begin{tabular}{@{}>{\raggedright\arraybackslash}p{0.18\textwidth}>{\raggedright\arraybackslash}p{0.36\textwidth}>{\raggedright\arraybackslash}p{0.38\textwidth}@{}}
+      \toprule
+      Topic & Conflicting statements & Consequence \\
+      \midrule
+      Source cohort & Section 2: 1,047 vignettes; Section 4 and Appendix A: 1,048 & Cleanup total differs by one source case \\
+      Formula CC without RAG & Section 5 prose: 7.34\%; Table 5: 46.49\% & The no-RAG Formula CC value cannot be uniquely reconciled \\
+      \bottomrule
+    \end{tabular}
+  \end{table}
+  \vspace{0.24cm}
+  No numerical reconciliation is inferred where the paper gives no resolution.
+  \sourcenote{Table~\ref{tab:app-paper-discrepancies}. Local reading note against \cite{wang2026medrac}.}
 \end{frame}
 
 \begin{frame}{Appendix: Formula-Bank Scaling}
   \centering
-  \sectionlabel{Formula bank: $55 \rightarrow 785$ documents ($\approx 14\times$)}\par\vspace{0.22cm}
-  \begin{tabular}{lrr}
-    \toprule
-    Embedding model & Top-1 (\%) & Top-2 (\%) \\
-    \midrule
-    ada-002 & 100.00 & 100.00 \\
-    text-embedding-3-large & 96.36 & 100.00 \\
-    text-embedding-3-small & 98.18 & 100.00 \\
-    \bottomrule
-  \end{tabular}
-  \tabcaption{Retrieval accuracy with the expanded 785-formula memory.}
-  \vspace{0.32cm}
-
-  {\small Top-2 retrieval remains $100\%$ in this experiment; the result does not establish scaling to unrestricted medical knowledge.}
-  \sourcenote{\cite{wang2026medrac}}
+  \begin{table}
+    \caption{Retrieval accuracy with the expanded formula bank.}
+    \label{tab:app-formula-scaling}
+    \begin{tabular}{lrr}
+      \toprule
+      Embedding model & Top-1 (\%) & Top-2 (\%) \\
+      \midrule
+      ada-002 & 100.00 & 100.00 \\
+      text-embedding-3-large & 96.36 & 100.00 \\
+      text-embedding-3-small & 98.18 & 100.00 \\
+      \bottomrule
+    \end{tabular}
+  \end{table}
+  \vspace{0.20cm}
+  \small Formula bank: $55\rightarrow785$ documents (approximately $14\times$).\par\vspace{0.10cm}
+  {\small Top-2 retrieval remains 100\% in this experiment; it does not establish unrestricted medical-knowledge scaling.}
+  \sourcenote{Table~\ref{tab:app-formula-scaling}. Source: \cite{wang2026medrac}, paper Table 7.}
 \end{frame}
 
 \begin{frame}{Appendix: Local Experiment Provenance}
   \small
-  \begin{columns}[T,onlytextwidth]
-    \column{0.48\textwidth}
-      \sectionlabel{Generation run}\par\vspace{0.10cm}
-      \begin{tabular}{@{}lr@{}}
-        Samples & 10 \\
-        Equation / rule & 7 / 3 \\
-        Generator & \texttt{gpt-4.1} \\
-        Temperature / seed & 0.0 / 42 \\
-        Failed / skipped & 0 / 0 \\
-      \end{tabular}
-    \column{0.48\textwidth}
-      \sectionlabel{Post-hoc evaluation}\par\vspace{0.10cm}
-      \begin{tabular}{@{}lr@{}}
-        Evaluator & \texttt{gpt-4.1} \\
-        Inputs & Stored outputs \\
-        Method--sample units & 20/20 \\
-        Judge calls per unit & 4 \\
-        Strict (P / M) & 8/10 / 9/10 \\
-        CC-A (P / M) & 88.9 / 90.0\% \\
-        First errors (P / M) & E+A / A \\
-      \end{tabular}
-  \end{columns}
-  \tabcaption{Configuration and selected diagnostic metrics for the local experiment.}
-  \vspace{0.16cm}
-
-  \sectionlabel{Documented artifact amendments}\par\vspace{0.04cm}
-  {\scriptsize
-  \begin{itemize}
-    \item Stored MedRaC code was re-executed with a 5-second timeout after the original 2-second timeout; no API request was repeated.
-    \item One Answer verdict was adjudicated against the benchmark interval; the original verdict remains in provenance.
-  \end{itemize}
-  }
+  \begin{table}
+    \caption{Local mini-experiment provenance.}
+    \label{tab:app-local-provenance}
+    \begin{tabular}{@{}lr@{\qquad}lr@{}}
+      \toprule
+      \multicolumn{2}{c}{\textbf{Generation}} & \multicolumn{2}{c}{\textbf{Post-hoc evaluation}} \\
+      \midrule
+      Samples & 10 & Evaluator & \texttt{openai/gpt-4.1} \\
+      Equation / rule & 7 / 3 & Inputs & Stored outputs \\
+      Generator & \texttt{openai/gpt-4.1} & Units & 20 / 20 \\
+      Embedding & \texttt{text-embedding-3-small} & Judge calls / unit & 4 \\
+      Temperature / seed & 0.0 / 42 & Strict (P / M) & 8 / 10 \quad 9 / 10 \\
+      \bottomrule
+    \end{tabular}
+  \end{table}
+  \vspace{0.24cm}
+  \sectionlabel{Interpretation}\par
+  End-task and post-hoc step-wise evaluation use different evaluators; the comparison is descriptive only.
+  \sourcenote{Table~\ref{tab:app-local-provenance}. Local experiment artifact manifest.}
 \end{frame}
 
 \begin{frame}{Appendix: Safe-Execution Boundary}
@@ -102,18 +116,17 @@
     \column{0.48\textwidth}
       \sectionlabel{Implemented safeguards}\par\vspace{0.10cm}
       \begin{itemize}
-        \item AST node and function allowlists.
-        \item No imports, filesystem, network, shell, or input.
-        \item Spawned child process with a strict timeout.
-        \item Result-type and magnitude checks.
+        \item AST node and function allowlists
+        \item No imports, filesystem, network, shell, or input
+        \item Spawned child process with strict timeout
+        \item Result-type and magnitude checks
       \end{itemize}
     \column{0.48\textwidth}
       \sectionlabel{Not a secure sandbox}\par\vspace{0.10cm}
       \begin{itemize}
-        \item No kernel isolation.
-        \item No syscall filtering.
-        \item No multi-tenant security guarantee.
-        \item Restricted to the seminar demonstration.
+        \item No kernel isolation or syscall filtering
+        \item No multi-tenant security guarantee
+        \item Restricted to the seminar demonstration
       \end{itemize}
   \end{columns}
 \end{frame}

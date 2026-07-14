@@ -1,134 +1,105 @@
-\section{Motivation and Research Problem}
-
-\begin{frame}[plain]{Presentation Outline}
-  \vspace{0.12cm}
+\showsectionfooterfalse
+\begin{frame}{Presentation Outline}
+  \vspace{0.28cm}
   \begin{columns}[T,onlytextwidth]
-    \column{0.48\textwidth}
+    \column{0.47\textwidth}
       \begin{enumerate}
         \item Motivation and Research Problem
-        \item Step-wise Evaluation Framework
+        \item Evaluation Framework
         \item MedRaC Methodology
       \end{enumerate}
-    \column{0.48\textwidth}
+    \column{0.47\textwidth}
       \begin{enumerate}
         \setcounter{enumi}{3}
-        \item Experiments and Results
+        \item Paper Experiments and Results
         \item Local Demo and Mini-Experiment
         \item Discussion and Conclusion
       \end{enumerate}
   \end{columns}
-\end{frame}
-
-\begin{frame}{Evidence-Based Medical Calculation as a Structured Task}
+  \vfill
   \centering
-  \begin{tikzpicture}[
-    node distance=0.22cm,
-    stage/.style={draw=SeminarBlue,minimum height=0.78cm,text width=2.40cm,align=center,fill=white,font=\small,inner xsep=3pt},
-    arr/.style={-{Latex[length=2mm]},DeepBlue,thick}
-  ]
-    \node[stage] (input) {Clinical note\\+ question};
-    \node[stage,right=of input] (formula) {Select formula\\or rule};
-    \node[stage,right=of formula] (extract) {Extract patient\\variables};
-    \node[stage,right=of extract] (compute) {Execute\\calculation};
-    \node[stage,right=of compute] (output) {Report result\\and\\\mbox{interpretation}};
-    \draw[arr] (input) -- (formula);
-    \draw[arr] (formula) -- (extract);
-    \draw[arr] (extract) -- (compute);
-    \draw[arr] (compute) -- (output);
-  \end{tikzpicture}
-  \figcaption{Evidence-based medical calculation requires a sequence of dependent decisions.}
-  \vspace{0.22cm}
+  {\Large\bfseries\color{DeepBlue}From a plausible score to a verifiable calculation process.}
+\end{frame}
+\showsectionfootertrue
 
+\begin{frame}{Medical Calculations Require More Than Arithmetic}
+  \vspace{0.24cm}
   \begin{columns}[T,onlytextwidth]
-    \column{0.48\textwidth}
-      \sectionlabel{Equation-based calculators}\par
-      \begin{equation}
-        y=f(x_1,x_2,\ldots,x_n)
-      \end{equation}
-      Examples: BMI, corrected sodium, and Cockcroft-Gault creatinine clearance.
-    \column{0.48\textwidth}
-      \sectionlabel{Rule-based calculators}\par
-      \begin{equation}
-        \mathrm{Score}=\sum_{j=1}^{m}p_j
-      \end{equation}
-      Examples: Wells score and CHA$_2$DS$_2$-VASc.
+    \column{0.30\textwidth}
+      \sectionlabel{Clinical notes}\par\vspace{0.10cm}
+      Relevant and irrelevant details coexist.\par\vspace{0.30cm}
+      \bluekey{Creatinine clearance}\par
+      \small Formula + patient variables
+    \column{0.03\textwidth}
+      \centering\color{RuleGray}\rule{0.5pt}{3.0cm}
+    \column{0.30\textwidth}
+      \sectionlabel{Clinical question}\par\vspace{0.10cm}
+      Select the calculator that fits the question.\par\vspace{0.30cm}
+      \bluekey{Corrected sodium}\par
+      \small Formula + unit-aware arithmetic
+    \column{0.03\textwidth}
+      \centering\color{RuleGray}\rule{0.5pt}{3.0cm}
+    \column{0.30\textwidth}
+      \sectionlabel{Clinical consequence}\par\vspace{0.10cm}
+      An incorrect score can change a decision.\par\vspace{0.30cm}
+      \bluekey{Wells score}\par
+      \small Clinical criteria + score
   \end{columns}
-  \vspace{0.18cm}
-  {\small An error at any stage can invalidate the reported clinical result.}
-  \sourcenote{\cite{wang2026medrac}}
+  \vfill
+  \centering
+  {\large\bfseries\color{DeepBlue}Medical calculation combines interpretation, selection, extraction, and computation.}
 \end{frame}
 
-\begin{frame}{Case Study: A Correct Score from an Incorrect Formula}
-  \small
+\begin{frame}{Final-Answer Accuracy Can Hide Invalid Reasoning}
   \begin{columns}[T,onlytextwidth]
-    \column{0.48\textwidth}
-      \sectionlabel{1. Clinical task}\par
-      A 57-year-old man has serum sodium $127$ mEq/L and glucose $527$ mg/dL. Compute corrected sodium using the Hillier equation.
-      \vspace{0.22cm}
-
-      \sectionlabel{2. Reference calculation}\par
+    \column{0.51\textwidth}
+      \sectionlabel{Corrected sodium: reference}\par
       \begin{equation}
-        \begin{aligned}
-          Na_{\mathrm{corr}}
-            &= Na_{\mathrm{measured}}
-              + 0.024\bigl(\mathrm{Glucose}-100\bigr) \\
-            &= 127 + 0.024(527-100) = 137.248
-        \end{aligned}
+        Na_{\mathrm{corrected}}=Na_{\mathrm{measured}}+0.024(Glucose-100)
+        \label{eq:hillier-reference}
       \end{equation}
-    \column{0.48\textwidth}
-      \sectionlabel{3. Model calculation}\par
-      The model extracts the correct values but applies a different correction rule:
+      \small Equation~\eqref{eq:hillier-reference} gives $137.248$ for $Na=127$ and $Glucose=527$.\par\vspace{0.16cm}
+      \sectionlabel{Incorrect model formula}\par
       \begin{equation}
         127+0.016(527)=135.432
+        \label{eq:hillier-invalid}
       \end{equation}
-      \sectionlabel{4. Evaluation outcome}\par
-      Baseline score: \correctmark\;($135.432\in[130.39,144.11]$)\\
-      Step-wise score: $F$ \incorrectmark; $E$ \correctmark; $C$ \correctmark; $A$ \incorrectmark
+    \column{0.43\textwidth}
+      \sectionlabel{Final-answer evaluation}\par\vspace{0.16cm}
+      \begin{enumerate}
+        \item Incorrect formula
+        \item Numerically plausible answer
+        \item Marked correct by broad tolerance
+      \end{enumerate}
+      \vspace{0.28cm}
+      \centering
+      {\large\bfseries\color{ErrorRed}Formula: Incorrect}\par\vspace{0.12cm}
+      Final score accepted under the original tolerance.
   \end{columns}
-  \vspace{0.18cm}
-  {\color{SeminarBlue}\rule{\linewidth}{0.7pt}}\par\vspace{0.10cm}
+  \vfill
   \centering
-  \textbf{The numerical tolerance hides a formula-selection error; the acceptable value is not a valid solution.}
-  \sourcenote{\cite{wang2026medrac}}
+  {\large\bfseries\color{DeepBlue}A plausible answer is not necessarily a valid answer.}
 \end{frame}
 
-\begin{frame}{Research Gap and Questions}
+\begin{frame}{Research Questions and Contributions}
+  \vspace{0.22cm}
   \begin{columns}[T,onlytextwidth]
     \column{0.47\textwidth}
-      \sectionlabel{Limitations of prior evaluation}\par\vspace{0.12cm}
-      \begin{itemize}
-        \item Final-answer scoring does not verify the selected medical formula.
-        \item Broad numerical tolerances can accept an invalid computation path.
-        \item Aggregate accuracy does not identify the first failed reasoning stage.
-        \item Existing evaluations conflate knowledge, extraction, interpretation, and arithmetic errors.
-      \end{itemize}
-    \column{0.49\textwidth}
       \sectionlabel{Research questions}\par\vspace{0.12cm}
       \begin{enumerate}
-        \item How should each stage of a medical calculation be evaluated?
-        \item Which stage causes the first failure?
-        \item Can formula retrieval and code execution reduce these failures?
+        \item How can each reasoning stage be evaluated?
+        \item Where do LLM failures originate?
+        \item Can external tools reduce these errors?
+      \end{enumerate}
+    \column{0.47\textwidth}
+      \sectionlabel{Contributions}\par\vspace{0.12cm}
+      \begin{enumerate}
+        \item Step-wise evaluation
+        \item Structured error attribution
+        \item MedRaC: Formula RAG + Python execution
       \end{enumerate}
   \end{columns}
-  \sourcenote{\cite{wang2026medrac}}
-\end{frame}
-
-\begin{frame}{Main Contributions}
-  \vspace{0.08cm}
-  \begin{enumerate}
-    \item \textbf{Step-wise evaluation.} Evaluate each MedCalc-Bench case at Formula, Extraction, Calculation, and Answer.
-    \item \textbf{Structured diagnosis.} Add Conditional Correctness, First Error Attribution, and an eight-category error taxonomy.
-    \item \textbf{Training-free intervention.} Combine Formula RAG and Python execution in MedRaC; the largest reported gain is $53.19$ percentage points.
-  \end{enumerate}
-  \vspace{0.38cm}
-  \begin{center}
-    \begin{tabular}{ccc}
-      \bluekey{Evaluate} & \bluekey{Diagnose} & \bluekey{Intervene} \\
-      F--E--C--A & Error attribution & Retrieval + execution
-    \end{tabular}
-  \end{center}
-  \vspace{0.20cm}
+  \vfill
   \centering
-  {\small For GPT-4o, reported accuracy drops from $62.7\%$ under final-answer scoring to $43.6\%$ under step-wise evaluation.}
-  \sourcenote{\cite{wang2026medrac}}
+  {\large\bfseries\color{DeepBlue}The paper evaluates, diagnoses, and then intervenes.}
 \end{frame}

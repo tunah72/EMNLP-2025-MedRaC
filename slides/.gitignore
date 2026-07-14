@@ -300,8 +300,8 @@ TSWLatexianTemp*
 # Uncomment the next line to have this generated file ignored.
 #*Notes.bib
 
-# PDF files
-*.pdf
+# # PDF files
+# *.pdf
 
 # Beamer presentation files
 *.nav

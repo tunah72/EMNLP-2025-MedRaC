@@ -63,7 +63,7 @@
   \begin{columns}[T,onlytextwidth]
     \column{0.48\textwidth}
       \sectionlabel{1. Clinical task}\par
-      A 57-year-old man has serum sodium $127$ mEq/L and glucose $527$ mg/dL. The task requests corrected sodium using the Hillier equation.
+      A 57-year-old man has serum sodium $127$ mEq/L and glucose $527$ mg/dL. Compute corrected sodium using the Hillier equation.
       \vspace{0.22cm}
 
       \sectionlabel{2. Reference calculation}\par
@@ -116,9 +116,9 @@
 \begin{frame}{Main Contributions}
   \vspace{0.08cm}
   \begin{enumerate}
-    \item \textbf{Step-wise evaluation.} Curate MedCalc-Bench and evaluate each case across Formula, Extraction, Calculation, and Answer.
-    \item \textbf{Automated structured diagnosis.} Use task-specific LLM judgments, Conditional Correctness, First Error Attribution, and an eight-category error taxonomy.
-    \item \textbf{Training-free intervention.} Combine Formula RAG with Python code execution in MedRaC, with reported gains of up to $53.19$ percentage points.
+    \item \textbf{Step-wise evaluation.} Evaluate each MedCalc-Bench case at Formula, Extraction, Calculation, and Answer.
+    \item \textbf{Structured diagnosis.} Add Conditional Correctness, First Error Attribution, and an eight-category error taxonomy.
+    \item \textbf{Training-free intervention.} Combine Formula RAG and Python execution in MedRaC; the largest reported gain is $53.19$ percentage points.
   \end{enumerate}
   \vspace{0.38cm}
   \begin{center}

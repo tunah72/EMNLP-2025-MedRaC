@@ -15,11 +15,11 @@
     \column{0.47\textwidth}
       \sectionlabel{Local experiment limitations}\par\vspace{0.10cm}
       \begin{itemize}
-        \item Ten fixed cases only.
-        \item Model substitution through GitHub Models.
-        \item A separate 55-formula retrieval index.
-        \item No LLM step-wise evaluation.
-        \item No basis for statistical inference; not a paper-exact reproduction.
+        \item Ten fixed cases; no basis for statistical inference.
+        \item Model substitution through GitHub Models and a separate 55-formula index.
+        \item Post-hoc step-wise evaluation by an LLM Judge, not human annotators.
+        \item One timeout repair and one answer adjudication are documented in the artifacts.
+        \item Not a paper-exact reproduction.
       \end{itemize}
   \end{columns}
   \sourcenote{\cite{wang2026medrac}}
@@ -32,7 +32,7 @@
     \vspace{0.14cm}
     \item \textbf{F--E--C--A evaluation, CC, and FE identify conditional reliability and the earliest failed stage.}
     \vspace{0.14cm}
-    \item \textbf{MedRaC reduces tool-addressable formula and arithmetic errors, while extraction and clinical interpretation remain unresolved bottlenecks.}
+    \item \textbf{MedRaC reduces formula and arithmetic errors. Extraction and clinical interpretation remain bottlenecks.}
   \end{enumerate}
   \vspace{0.42cm}
   \centering

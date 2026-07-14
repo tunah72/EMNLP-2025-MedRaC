@@ -55,30 +55,38 @@
   \figcaption{Streamlit replay for Creatinine Clearance (Cockcroft-Gault Equation), Calculator ID 2.}
 \end{frame}
 
-\begin{frame}{Local Mini-Experiment Setup and Results}
+\begin{frame}{Local Experiment 1: End-Task Evaluation}
   \centering
-  \scriptsize
-  \begin{tabular}{@{}>{\bfseries}ll@{\hspace{0.70cm}}>{\bfseries}ll@{}}
-    Baseline & Plain(\texttt{cot}) & Proposed & MedRaC + RAG \\
-    Generator & \texttt{openai/gpt-4.1} & Embedding & \texttt{text-embedding-3-small} \\
-    Samples & 10 fixed (7 eq., 3 rule) & Temperature / seed & 0.0 / 42 \\
-  \end{tabular}
-  \vspace{0.16cm}
-
-  \small
+  \vspace{0.68cm}
+  {\large
   \begin{tabular}{lrr}
     \toprule
-    Metric & Plain & MedRaC \\
+    Method & Correct & Accuracy \\
     \midrule
-    Final-answer correct & 9/10 & \textbf{10/10} \\
-    Formula / Extraction / Calculation / Answer & n/a & n/a \\
-    Strict correctness / CC / FE & n/a & n/a \\
-    Failed / skipped & 0 / 0 & 0 / 0 \\
+    Plain CoT & 9/10 & $90\%$ \\
+    MedRaC + RAG & \textbf{10/10} & \textbf{$100\%$} \\
     \bottomrule
-  \end{tabular}
-  \tabcaption{Local mini-experiment results on the fixed ten-case subset.}
-  \raggedright
-  {\scriptsize Step-wise evaluation was disabled; unavailable metrics are not inferred.}
-  \vspace{0.14cm}
-  {\small This ten-case comparison is descriptive and does not support statistical inference.}
+  \end{tabular}}
+  \tabcaption{Rule-based final-answer accuracy on ten fixed cases.}
+  \vspace{0.62cm}
+
+  {\small \bluekey{Observation:} MedRaC is correct on one additional case ($+10$ percentage points); the result is descriptive for $n=10$.}
+\end{frame}
+
+\begin{frame}{Local Experiment 2: Step-wise Evaluation}
+  \centering
+  \vspace{0.48cm}
+  {\large
+  \begin{tabular}{lrrrrr}
+    \toprule
+    Method & Formula & Extraction & Calculation & Answer & Strict \\
+    \midrule
+    Plain CoT & 10/10 & 9/10 & 10/10 & 8/10 & 8/10 \\
+    MedRaC + RAG & 10/10 & \textbf{10/10} & 10/10 & \textbf{9/10} & \textbf{9/10} \\
+    \bottomrule
+  \end{tabular}}
+  \tabcaption{Post-hoc F--E--C--A and strict correctness on stored outputs.}
+  \vspace{0.58cm}
+
+  {\small \bluekey{Observation:} MedRaC improves Extraction, Answer, and Strict by one case; Formula and Calculation remain unchanged.}
 \end{frame}

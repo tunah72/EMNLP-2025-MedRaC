@@ -34,22 +34,23 @@ Paper source: Wang et al., *From Scores to Steps: Diagnosing and Improving LLM P
 | 26 | LLM Judge validation | Table 2 and Appendix C, PDF pp. 6 and 13-14 |
 | 27 | Local demo objective and pipeline | `seminar_demo/pipeline.py`, `seminar_demo/safe_execution.py`, `streamlit_app.py` |
 | 28 | Streamlit representative example | Actual replay screenshots under `slides/assets/local/` |
-| 29 | Local mini-experiment | `artifacts/experiments/20260713T060240915862Z/manifest.json` and `metrics.json` |
-| 30 | Interpretation and limitations | Paper Sections 6-8, PDF p. 9; local manifest and metrics |
-| 31 | Conclusions | Synthesis of Sections 3-8, PDF pp. 3-9 |
-| 32 | Questions and discussion | Research implications and limitations in Sections 6-8, PDF p. 9 |
+| 29 | Local Experiment 1: end-task evaluation | `artifacts/experiments/20260713T060240915862Z/manifest.json`, `metrics.json`, and `report.md` |
+| 30 | Local Experiment 2: step-wise evaluation | `artifacts/experiments/20260713T060240915862Z-stepwise/manifest.json`, `metrics.json`, and `report.md` |
+| 31 | Interpretation and limitations | Paper Sections 6-8, PDF p. 9; both local experiment artifacts |
+| 32 | Conclusions | Synthesis of Sections 3-8, PDF pp. 3-9 |
+| 33 | Questions and discussion | Research implications and limitations in Sections 6-8, PDF p. 9 |
 
 ## Appendix
 
 | Slide | Topic | Primary evidence |
 |---:|---|---|
-| 33 | Complete main-results table | Paper Table 1, PDF p. 6 |
-| 34 | Complete metric definitions | Section 3.1, PDF p. 3 |
-| 35 | Paper discrepancies | Sections 2, 4, and 5; Appendix A, PDF pp. 2, 5, 8, and 13 |
-| 36 | Formula-bank scaling | Table 7 and Section 5, PDF pp. 8 and 13 |
-| 37 | Local experiment details | `artifacts/experiments/20260713T060240915862Z/manifest.json` and `metrics.json` |
-| 38 | Safe-execution boundary | `seminar_demo/safe_execution.py` and `docs/RUNBOOK.md` |
-| 39 | References | Paper bibliographic metadata |
+| 34 | Complete main-results table | Paper Table 1, PDF p. 6 |
+| 35 | Complete metric definitions | Section 3.1, PDF p. 3 |
+| 36 | Paper discrepancies | Sections 2, 4, and 5; Appendix A, PDF pp. 2, 5, 8, and 13 |
+| 37 | Formula-bank scaling | Table 7 and Section 5, PDF pp. 8 and 13 |
+| 38 | Local experiment provenance | Both local experiment manifests, metrics, reports, and stored samples |
+| 39 | Safe-execution boundary | `seminar_demo/safe_execution.py` and `docs/RUNBOOK.md` |
+| 40 | References | Paper bibliographic metadata |
 
 ## Quantitative ledger
 
@@ -61,7 +62,8 @@ Paper source: Wang et al., *From Scores to Steps: Diagnosing and Improving LLM P
 - Table 2 LLM-Expert agreement: Formula `90.2%`; Extraction `78.3%`; Calculation `88.1%`; Answer `97.8%`; 46 validated samples from five calculators.
 - Error-type agreement uses multi-label Jaccard similarity, `|A intersection B| / |A union B|`.
 - Formula-bank scaling from 55 to 785 documents: Top-1 retrieval `100%` for ada-002, `96.36%` for text-embedding-3-large, and `98.18%` for text-embedding-3-small; Top-2 retrieval `100%` for all three embedding models.
-- Local run: Plain CoT `9/10`; MedRaC RAG `10/10`; zero failed/skipped; step-wise evaluation disabled, so local F/E/C/A, strict, CC, and FE metrics are unavailable.
+- Local end-task run: Plain CoT `9/10`; MedRaC RAG `10/10`; paired outcomes `9` both correct and `1` MedRaC-only correct; zero failed/skipped after the documented timeout repair.
+- Local step-wise evaluation: Plain F/E/C/A/Strict `10/10, 9/10, 10/10, 8/10, 8/10`; MedRaC `10/10, 10/10, 10/10, 9/10, 9/10`. Plain first errors: Extraction `1`, Answer `1`; MedRaC first errors: Answer `1`.
 
 ## Disclosed paper discrepancies
 

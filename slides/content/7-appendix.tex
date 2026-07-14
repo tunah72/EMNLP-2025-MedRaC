@@ -61,34 +61,40 @@
   \sourcenote{\cite{wang2026medrac}}
 \end{frame}
 
-\begin{frame}{Appendix: Local Experiment}
+\begin{frame}{Appendix: Local Experiment Provenance}
+  \small
   \begin{columns}[T,onlytextwidth]
     \column{0.48\textwidth}
-      \sectionlabel{Recorded configuration}\par\vspace{0.10cm}
+      \sectionlabel{Generation run}\par\vspace{0.10cm}
       \begin{tabular}{@{}lr@{}}
         Samples & 10 \\
         Equation / rule & 7 / 3 \\
+        Generator & \texttt{gpt-4.1} \\
         Temperature / seed & 0.0 / 42 \\
-        Plain chat attempts & 10 \\
-        MedRaC chat attempts & 20 \\
-        MedRaC embedding attempts & 10 \\
         Failed / skipped & 0 / 0 \\
       \end{tabular}
     \column{0.48\textwidth}
-      \sectionlabel{Metric availability}\par\vspace{0.10cm}
+      \sectionlabel{Post-hoc evaluation}\par\vspace{0.10cm}
       \begin{tabular}{@{}lr@{}}
-        Final-answer accuracy & Available \\
-        Formula accuracy & Not evaluated \\
-        Extraction accuracy & Not evaluated \\
-        Calculation accuracy & Not evaluated \\
-        Answer step accuracy & Not evaluated \\
-        Strict / CC / FE & Not evaluated \\
+        Evaluator & \texttt{gpt-4.1} \\
+        Inputs & Stored outputs \\
+        Method--sample units & 20/20 \\
+        Judge calls per unit & 4 \\
+        Strict (P / M) & 8/10 / 9/10 \\
+        CC-A (P / M) & 88.9 / 90.0\% \\
+        First errors (P / M) & E+A / A \\
       \end{tabular}
-      \vspace{0.18cm}
-
-      {\small LLM step-wise evaluation was disabled in the completed run.}
   \end{columns}
-  \tabcaption{Execution counts and metric availability in the local experiment.}
+  \tabcaption{Configuration and selected diagnostic metrics for the local experiment.}
+  \vspace{0.16cm}
+
+  \sectionlabel{Documented artifact amendments}\par\vspace{0.04cm}
+  {\scriptsize
+  \begin{itemize}
+    \item Stored MedRaC code was re-executed with a 5-second timeout after the original 2-second timeout; no API request was repeated.
+    \item One Answer verdict was adjudicated against the benchmark interval; the original verdict remains in provenance.
+  \end{itemize}
+  }
 \end{frame}
 
 \begin{frame}{Appendix: Safe-Execution Boundary}

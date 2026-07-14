@@ -18,25 +18,33 @@
   \end{columns}
   \vspace{0.12cm}
   \centering
-  {\small MedRaC uses LLM inference and embedding retrieval; it does not introduce a new neural architecture or require fine-tuning.}
+  {\small MedRaC is a training-free inference pipeline; it does not introduce a new neural architecture.}
   \sourcenote{\cite{wang2026medrac}}
 \end{frame}
 
 \begin{frame}{Formula Retrieval}
-  \begin{columns}[c,onlytextwidth]
-    \column{0.48\textwidth}
+  \vspace{0.08cm}
+  \begin{columns}[T,onlytextwidth]
+    \column{0.54\textwidth}
+      \sectionlabel{Retrieval procedure}\par\vspace{0.12cm}
       \begin{enumerate}
-        \item Encode the calculator question.
-        \item Retrieve the most similar formula document.
-        \item Condition subsequent stages on the retrieved formula.
+        \item Encode the calculator question as $e_q$.
+        \item Retrieve $d^{\ast}$, the nearest formula document in $D$.
+        \item Ground value extraction and code generation in $d^{\ast}$.
       \end{enumerate}
-    \column{0.48\textwidth}
+    \column{0.42\textwidth}
       \centering
-      {\Large
+      \sectionlabel{Nearest-neighbor objective}\par\vspace{0.20cm}
+      {\large
       \begin{equation}
         d^{\ast}=\arg\max_{d\in D}\operatorname{sim}(e_q,e_d)
       \end{equation}}
-      {\small $e_q$: question embedding; $e_d$: formula-document embedding.}
+      \vspace{0.18cm}
+      {\small
+      \begin{tabular}{@{}>{$}l<{$}@{\;:\;}l@{}}
+        e_q & question embedding \\
+        e_d & formula-document embedding
+      \end{tabular}}
   \end{columns}
   \sourcenote{\cite{wang2026medrac}}
 \end{frame}
@@ -100,6 +108,6 @@ result = measured_na + 0.024 * (glucose - 100)
   \tabcaption{MedRaC components and their primary target errors.}
   \vspace{0.36cm}
 
-  {\small MedRaC directly externalizes formula knowledge and arithmetic; extraction and clinical interpretation remain LLM-dependent.}
+  {\small MedRaC externalizes formula knowledge and arithmetic. Extraction and clinical interpretation remain LLM-dependent.}
   \sourcenote{\cite{wang2026medrac}}
 \end{frame}

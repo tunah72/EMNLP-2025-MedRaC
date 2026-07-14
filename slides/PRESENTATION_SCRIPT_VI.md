@@ -86,7 +86,7 @@ Tiếp theo, nhóm chạy live demo. Khi chạy, chỉ theo dõi patient input, 
 
 ### Slide 19 — Local Mini-Experiment (0:45)
 
-Trên cùng 10 samples, MedRaC cải thiện final-answer accuracy, extraction correctness và strict all-steps correctness. Đây là kiểm tra nhỏ để minh họa pipeline trên local run.
+Slide này trình bày hai bảng kết quả trên cùng 10 samples cố định, gồm 7 equation-based và 3 rule-based cases. Bảng bên trái là lượt chạy end-to-end với rule-based evaluator: Plain CoT 9/10 và MedRaC 10/10, cả hai hoàn thành 10/10 cases. Bảng bên phải là đánh giá hậu kỳ LLM F--E--C--A trên các output đã lưu: Plain CoT đạt F/E/C/A là 10/9/10/8 và strict 8/10; MedRaC là 10/10/10/9 và strict 9/10.
 
 ## VI. Discussion and Conclusion
 

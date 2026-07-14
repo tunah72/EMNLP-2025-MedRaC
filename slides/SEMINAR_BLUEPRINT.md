@@ -23,7 +23,7 @@ Slides 1 and 2 leave the footer context blank. From Slide 3 onward, the footer d
 - Evaluation Framework shows the complete Strict Correctness, Conditional Correctness, and First Error Attribution equations.
 - Paper evidence uses Figures 1--4, the full paper main-results table, and compact tables for setup, focused gains, and LLM--expert agreement.
 - Ablation, Streamlit screenshots, appendix material, references frame, repository details, and local implementation citations are excluded.
-- The local section is limited to one live-demo pipeline cue and one fixed 10-sample result table.
+- The local section is limited to one live-demo pipeline cue and two compact fixed-10-sample tables: end-to-end rule-based final-answer evaluation and post-hoc LLM F--E--C--A evaluation of the same stored outputs.
 - Discussion and conclusions concern the paper only.
 
 ## Layout system

@@ -35,23 +35,41 @@
 
 \begin{frame}{Local Mini-Experiment}
   \raggedright
-  \begin{table}
-    \caption{Fixed 10-sample comparison.}
-    \label{tab:local-mini-experiment}
-    \begin{tabular}{lcc}
-      \toprule
-      Metric & Plain CoT & MedRaC + RAG \\
-      \midrule
-      Final-answer accuracy & 9/10 & \textbf{10/10} \\
-      Formula correctness & 10/10 & 10/10 \\
-      Extraction correctness & 9/10 & \textbf{10/10} \\
-      Calculation correctness & 10/10 & 10/10 \\
-      Strict all-steps correctness & 8/10 & \textbf{9/10} \\
-      \bottomrule
-    \end{tabular}
-  \end{table}
-  \vspace{0.24cm}
-  \sectionlabel{Same fixed samples, baseline, and proposed pipeline}\par\vspace{0.24cm}
-  \centering
-  {\large\bfseries\color{DeepBlue}MedRaC improved extraction and strict all-steps correctness in this local run.}
+  \begin{columns}[T,onlytextwidth]
+    \column{0.40\textwidth}
+      \begin{table}
+        \caption{End-to-end rule evaluation.}
+        \label{tab:local-end-to-end}
+        \small
+        \renewcommand{\arraystretch}{1.12}
+        \begin{tabular}{@{}lcc@{}}
+          \toprule
+          Metric & Plain & MedRaC \\
+          \midrule
+          Final answer & 9/10 & \textbf{10/10} \\
+          Completed & 10/10 & 10/10 \\
+          \bottomrule
+        \end{tabular}
+      \end{table}
+    \column{0.54\textwidth}
+      \begin{table}
+        \caption{Post-hoc LLM F--E--C--A evaluation.}
+        \label{tab:local-stepwise}
+        \small
+        \renewcommand{\arraystretch}{1.12}
+        \begin{tabular}{@{}lcc@{}}
+          \toprule
+          Stage & Plain & MedRaC \\
+          \midrule
+          Formula (F) & 10/10 & 10/10 \\
+          Extraction (E) & 9/10 & \textbf{10/10} \\
+          Calculation (C) & 10/10 & 10/10 \\
+          Answer (A) & 8/10 & \textbf{9/10} \\
+          Strict F--E--C--A & 8/10 & \textbf{9/10} \\
+          \bottomrule
+        \end{tabular}
+      \end{table}
+  \end{columns}
+  \vfill
+  {\footnotesize\color{Muted}Fixed sample set: 10 cases (7 equation-based; 3 rule-based). Post-hoc evaluation uses the stored generation outputs.}\par
 \end{frame}
